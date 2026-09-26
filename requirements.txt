@@ -4,7 +4,7 @@ Flask-SQLAlchemy
 Flask-WTF
 SQLAlchemy
 Werkzeug
-google-generativeai
+google-genai
 gunicorn
 psycopg2-binary
 email-validator
