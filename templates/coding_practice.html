@@ -1,0 +1,861 @@
+{% extends "base.html" %}
+
+{% block title %}
+Coding Practice — Career Compass
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/coding-practice.css') }}">
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="cc-coding-page">
+
+    <!-- Ambient Background -->
+
+    <div class="cc-coding-bg-grid"></div>
+
+    <div class="cc-coding-orb cc-coding-orb-one"></div>
+    <div class="cc-coding-orb cc-coding-orb-two"></div>
+
+
+    <!-- Hero -->
+
+    <section class="cc-coding-hero cc-reveal">
+
+        <div class="cc-coding-hero-content">
+
+            <div class="cc-section-eyebrow">
+
+                <span class="cc-eyebrow-dot"></span>
+
+                SKILL BUILDER
+
+            </div>
+
+
+            <h1>
+                Coding <span>Practice</span>
+            </h1>
+
+
+            <p>
+                Strengthen your programming fundamentals through
+                focused problems, instant test feedback, and
+                hands-on problem solving.
+            </p>
+
+
+            <div class="cc-coding-hero-meta">
+
+                <span>
+                    <i class="fas fa-code"></i>
+                    Hands-on practice
+                </span>
+
+                <span>
+                    <i class="fas fa-bolt"></i>
+                    Instant feedback
+                </span>
+
+                <span>
+                    <i class="fas fa-chart-line"></i>
+                    Track progress
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="cc-coding-hero-orbit">
+
+            <div class="cc-code-core">
+
+                <i class="fas fa-code"></i>
+
+            </div>
+
+
+            <span class="cc-code-orbit orbit-one"></span>
+            <span class="cc-code-orbit orbit-two"></span>
+
+
+            <span class="cc-code-particle particle-one"></span>
+            <span class="cc-code-particle particle-two"></span>
+            <span class="cc-code-particle particle-three"></span>
+
+        </div>
+
+    </section>
+
+
+    <!-- Toolbar -->
+
+    <section class="cc-coding-toolbar cc-reveal">
+
+        <div class="cc-problem-search">
+
+            <i class="fas fa-search"></i>
+
+            <input
+                type="search"
+                id="problem-search"
+                placeholder="Search problems..."
+                autocomplete="off"
+                aria-label="Search coding problems">
+
+            <kbd>
+                /
+            </kbd>
+
+        </div>
+
+
+        <div class="cc-toolbar-right">
+
+            <span class="cc-toolbar-label">
+                View
+            </span>
+
+
+            <div class="cc-view-toggle">
+
+                <button
+                    type="button"
+                    class="cc-view-btn active"
+                    data-view="grid"
+                    title="Grid view"
+                    aria-label="Grid view">
+
+                    <i class="fas fa-grip"></i>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="cc-view-btn"
+                    data-view="list"
+                    title="List view"
+                    aria-label="List view">
+
+                    <i class="fas fa-list"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Filters -->
+
+    <section class="cc-coding-filters cc-reveal">
+
+        <div class="cc-filter-heading">
+
+            <span class="cc-filter-icon">
+
+                <i class="fas fa-sliders"></i>
+
+            </span>
+
+            <div>
+
+                <strong>
+                    Filter problems
+                </strong>
+
+                <span>
+                    Narrow your practice set
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="cc-filter-group">
+
+            <label for="difficulty-filter">
+                Difficulty
+            </label>
+
+            <select id="difficulty-filter">
+
+                <option value="all">
+                    All difficulties
+                </option>
+
+                <option value="easy">
+                    Easy
+                </option>
+
+                <option value="medium">
+                    Medium
+                </option>
+
+                <option value="hard">
+                    Hard
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="cc-filter-group">
+
+            <label for="topic-filter">
+                Topic
+            </label>
+
+            <select id="topic-filter">
+
+                <option value="all">
+                    All topics
+                </option>
+
+                {% for topic in topics %}
+
+                <option value="{{ topic|lower }}">
+                    {{ topic }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <div class="cc-filter-group">
+
+            <label for="status-filter">
+                Status
+            </label>
+
+            <select id="status-filter">
+
+                <option value="all">
+                    All problems
+                </option>
+
+                <option value="completed">
+                    Solved
+                </option>
+
+                <option value="incomplete">
+                    Unsolved
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="cc-filter-actions">
+
+            <button
+                type="button"
+                id="apply-filter"
+                class="cc-filter-apply">
+
+                <i class="fas fa-filter"></i>
+
+                Apply
+
+            </button>
+
+
+            <button
+                type="button"
+                id="reset-filter"
+                class="cc-filter-reset">
+
+                <i class="fas fa-rotate-left"></i>
+
+                Reset
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- Progress -->
+
+    <section class="cc-coding-progress cc-reveal">
+
+        <div class="cc-coding-progress-main">
+
+            <div class="cc-progress-summary">
+
+                <span class="cc-section-eyebrow">
+                    YOUR PROGRESS
+                </span>
+
+
+                <div class="cc-progress-number">
+
+                    {{ solved_count }}
+
+                    <span>
+                        / {{ total_count }}
+                    </span>
+
+                </div>
+
+
+                <p>
+                    Problems solved
+                </p>
+
+            </div>
+
+
+            <div class="cc-progress-bar-wrap">
+
+                <div class="cc-progress-bar">
+
+                    <span data-progress="{{ progress_percentage }}"></span>
+
+                </div>
+
+
+                <div class="cc-progress-bar-meta">
+
+                    <span>
+                        Overall progress
+                    </span>
+
+                    <strong>
+                        {{ progress_percentage }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="cc-coding-progress-stat">
+
+            <div class="cc-progress-stat-icon accepted">
+
+                <i class="fas fa-check"></i>
+
+            </div>
+
+            <div>
+
+                <strong>
+                    {{ solved_count }}
+                </strong>
+
+                <span>
+                    Accepted
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="cc-coding-progress-stat">
+
+            <div class="cc-progress-stat-icon available">
+
+                <i class="fas fa-layer-group"></i>
+
+            </div>
+
+            <div>
+
+                <strong>
+                    {{ total_count }}
+                </strong>
+
+                <span>
+                    Available
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Problem Heading -->
+
+    <div class="cc-problems-heading cc-reveal">
+
+        <div>
+
+            <span class="cc-section-eyebrow">
+                PRACTICE SET
+            </span>
+
+            <h2>
+                Coding Problems
+            </h2>
+
+        </div>
+
+
+        <div class="cc-problem-count-wrap">
+
+            <span
+                class="cc-problem-count"
+                id="problem-count">
+
+                {{ total_count }} problems
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Problem Grid -->
+
+    <div
+        class="cc-problem-grid"
+        id="problem-grid">
+
+        {% if problems %}
+
+        {% for problem in problems %}
+
+        <article
+            class="cc-problem-card cc-reveal"
+            data-difficulty="{{ problem.difficulty|lower }}"
+            data-topic="{{ problem.topic|lower }}"
+            data-completed="{{ 'true' if problem.completed else 'false' }}"
+            data-title="{{ problem.title|lower }}"
+            data-description="{{ problem.description|lower }}">
+
+
+            <!-- Card Top -->
+
+            <div class="cc-problem-top">
+
+                <span class="cc-problem-id">
+
+                    #{{ "%02d"|format(loop.index) }}
+
+                </span>
+
+
+                {% if problem.completed %}
+
+                <span class="cc-problem-status solved">
+
+                    <span class="status-check">
+
+                        <i class="fas fa-check"></i>
+
+                    </span>
+
+                    Solved
+
+                </span>
+
+                {% else %}
+
+                <span class="cc-problem-status unsolved">
+
+                    <span class="status-pulse"></span>
+
+                    Unsolved
+
+                </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Title -->
+
+            <h3 class="cc-problem-title">
+                {{ problem.title }}
+            </h3>
+
+
+            <!-- Meta -->
+
+            <div class="cc-problem-meta">
+
+                <span class="
+                    difficulty-badge
+                    difficulty-{{ problem.difficulty|lower }}
+                ">
+
+                    {% if problem.difficulty|lower == "easy" %}
+
+                    <i class="fas fa-seedling"></i>
+
+                    {% elif problem.difficulty|lower == "medium" %}
+
+                    <i class="fas fa-bolt"></i>
+
+                    {% else %}
+
+                    <i class="fas fa-fire"></i>
+
+                    {% endif %}
+
+                    {{ problem.difficulty }}
+
+                </span>
+
+
+                <span class="topic-badge">
+
+                    <i class="fas fa-tag"></i>
+
+                    {{ problem.topic }}
+
+                </span>
+
+            </div>
+
+
+            <!-- Description -->
+
+            <p class="cc-problem-description">
+                {{ problem.description }}
+            </p>
+
+
+            <!-- Test Cases -->
+
+            <div class="cc-problem-examples">
+
+                <span class="examples-icon">
+
+                    <i class="fas fa-terminal"></i>
+
+                </span>
+
+                <span>
+
+                    {{ problem.test_cases|length }}
+
+                    test
+
+                    {% if problem.test_cases|length != 1 %}
+                    cases
+                    {% else %}
+                    case
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <div class="cc-problem-footer">
+
+                <span class="cc-problem-focus">
+
+                    {% if problem.difficulty|lower == "easy" %}
+
+                    <i class="fas fa-seedling"></i>
+                    Fundamentals
+
+                    {% elif problem.difficulty|lower == "medium" %}
+
+                    <i class="fas fa-bolt"></i>
+                    Problem solving
+
+                    {% else %}
+
+                    <i class="fas fa-fire"></i>
+                    Advanced
+
+                    {% endif %}
+
+                </span>
+
+
+                <a
+                    href="{{ url_for(
+                        'solve_problem',
+                        problem_id=problem.id
+                    ) }}"
+                    class="cc-solve-btn">
+
+                    {% if problem.completed %}
+
+                    Solve again
+
+                    {% else %}
+
+                    Start problem
+
+                    {% endif %}
+
+
+                    <span>
+
+                        <i class="fas fa-arrow-right"></i>
+
+                    </span>
+
+                </a>
+
+            </div>
+
+        </article>
+
+        {% endfor %}
+
+
+        <!-- Search Empty -->
+
+        <div
+            class="cc-coding-search-empty"
+            id="coding-search-empty"
+            hidden>
+
+            <div class="cc-empty-icon">
+
+                <i class="fas fa-search"></i>
+
+            </div>
+
+
+            <h3>
+                No matching problems
+            </h3>
+
+
+            <p>
+                Try changing your search or filters.
+            </p>
+
+
+            <button
+                type="button"
+                class="cc-empty-btn"
+                id="empty-reset-btn">
+
+                <i class="fas fa-rotate-left"></i>
+
+                Reset filters
+
+            </button>
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- No Problems -->
+
+        <div class="cc-coding-empty">
+
+            <div class="cc-empty-icon">
+
+                <i class="fas fa-code"></i>
+
+            </div>
+
+
+            <h3>
+                No coding problems yet
+            </h3>
+
+
+            <p>
+                Coding challenges will appear here once they
+                are added to the practice library.
+            </p>
+
+        </div>
+
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Guidance -->
+
+    <section class="cc-coding-guidance cc-reveal">
+
+        <div class="cc-guidance-icon">
+
+            <i class="fas fa-lightbulb"></i>
+
+        </div>
+
+
+        <div class="cc-guidance-content">
+
+            <span>
+                PRACTICE STRATEGY
+            </span>
+
+            <h3>
+                Think first. Code second.
+            </h3>
+
+            <p>
+                Understand the input and expected output first.
+                Build a simple approach, test edge cases, and
+                improve the solution only after it works correctly.
+            </p>
+
+        </div>
+
+
+        <div class="cc-guidance-decoration">
+
+            <i class="fas fa-terminal"></i>
+
+        </div>
+
+    </section>
+
+
+    <!-- Recent Submissions -->
+
+    {% if recent_submissions %}
+
+    <section class="cc-recent-submissions cc-reveal">
+
+        <div class="cc-problems-heading">
+
+            <div>
+
+                <span class="cc-section-eyebrow">
+                    ACTIVITY
+                </span>
+
+                <h2>
+                    Recent Submissions
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="cc-submission-list">
+
+            {% for submission in recent_submissions %}
+
+            <a
+                href="{{ url_for(
+                    'solve_problem',
+                    problem_id=submission.problem_id
+                ) }}"
+                class="cc-submission-row">
+
+
+                <div class="
+                    cc-submission-icon
+                    {% if submission.status == 'Accepted' %}
+                        accepted
+                    {% elif submission.status == 'Runtime Error' %}
+                        runtime
+                    {% else %}
+                        wrong
+                    {% endif %}
+                ">
+
+                    {% if submission.status == "Accepted" %}
+
+                    <i class="fas fa-check"></i>
+
+                    {% elif submission.status == "Runtime Error" %}
+
+                    <i class="fas fa-triangle-exclamation"></i>
+
+                    {% else %}
+
+                    <i class="fas fa-xmark"></i>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="cc-submission-info">
+
+                    <strong>
+                        Problem #{{ submission.problem_id }}
+                    </strong>
+
+                    <span>
+
+                        <i class="fas fa-code"></i>
+
+                        {{ submission.language|capitalize }}
+
+                    </span>
+
+                </div>
+
+
+                <span class="
+                    cc-submission-status
+                    {% if submission.status == 'Accepted' %}
+                        accepted
+                    {% elif submission.status == 'Runtime Error' %}
+                        runtime
+                    {% else %}
+                        wrong
+                    {% endif %}
+                ">
+
+                    {{ submission.status }}
+
+                </span>
+
+
+                <i class="fas fa-arrow-right cc-submission-arrow"></i>
+
+            </a>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{{ url_for('static', filename='js/coding-practice.js') }}"
+    defer>
+</script>
+
+{% endblock %}

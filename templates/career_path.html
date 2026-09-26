@@ -1,0 +1,659 @@
+{% extends "base.html" %}
+
+{% block title %}Career Paths — Career Compass{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/career-path.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="career-page">
+
+    <!-- Ambient Background -->
+    <div class="career-ambient" aria-hidden="true">
+
+        <span class="career-orb career-orb-one"></span>
+        <span class="career-orb career-orb-two"></span>
+        <span class="career-orb career-orb-three"></span>
+
+        <span class="career-grid-bg"></span>
+
+    </div>
+
+    <!-- Hero -->
+    <section class="career-hero career-reveal">
+
+        <div class="career-hero-glow"></div>
+
+        <div class="career-hero-content">
+
+            <div class="career-eyebrow">
+
+                <span class="eyebrow-icon">
+                    <i class="fa-solid fa-route"></i>
+                </span>
+
+                Career Discovery
+
+            </div>
+
+            <h1>
+                Find a direction
+                <span>for your career.</span>
+            </h1>
+
+            <p>
+                Explore career paths connected to your academic
+                background, specialization and current skill set.
+                Use these paths as a starting point for your learning
+                and career planning.
+            </p>
+
+            <div class="hero-meta">
+
+                <div class="hero-meta-item">
+
+                    <i class="fa-solid fa-compass"></i>
+
+                    <span>
+                        Explore possibilities
+                    </span>
+
+                </div>
+
+                <div class="hero-meta-item">
+
+                    <i class="fa-solid fa-graduation-cap"></i>
+
+                    <span>
+                        Build relevant skills
+                    </span>
+
+                </div>
+
+                <div class="hero-meta-item">
+
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+
+                    <span>
+                        Plan your next step
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+
+            <div class="hero-ring hero-ring-one"></div>
+            <div class="hero-ring hero-ring-two"></div>
+
+            <div class="hero-compass">
+
+                <i class="fa-solid fa-compass"></i>
+
+            </div>
+
+            <span class="hero-particle particle-one"></span>
+            <span class="hero-particle particle-two"></span>
+            <span class="hero-particle particle-three"></span>
+
+        </div>
+
+    </section>
+
+    <!-- Profile Context -->
+    <section class="context-grid">
+
+        <!-- Domain -->
+        <article class="context-card career-reveal">
+
+            <div class="context-icon">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+            <div class="context-text">
+
+                <span class="context-label">
+                    Academic Domain
+                </span>
+
+                <span class="context-value">
+
+                    {{ current_user.academic_domain
+                       or 'Not specified' }}
+
+                </span>
+
+            </div>
+
+            <div class="context-glow"></div>
+
+        </article>
+
+        <!-- Specialization -->
+        <article class="context-card career-reveal">
+
+            <div class="context-icon cyan">
+
+                <i class="fa-solid fa-code"></i>
+
+            </div>
+
+            <div class="context-text">
+
+                <span class="context-label">
+                    Specialization
+                </span>
+
+                <span class="context-value">
+
+                    {{ current_user.specialization
+                       or 'Not specified' }}
+
+                </span>
+
+            </div>
+
+            <div class="context-glow"></div>
+
+        </article>
+
+        <!-- Skills -->
+        <article class="context-card career-reveal">
+
+            <div class="context-icon orange">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+            </div>
+
+            <div class="context-text">
+
+                <span class="context-label">
+                    Skills Added
+                </span>
+
+                <span class="context-value">
+
+                    {% if skills %}
+                        {{ skills|length }} skills
+                    {% else %}
+                        Add your skills
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+            <div class="context-glow"></div>
+
+        </article>
+
+    </section>
+
+    <!-- Section Header -->
+    <div class="section-header career-reveal">
+
+        <div class="section-title-wrap">
+
+            <div class="section-kicker">
+
+                <span></span>
+
+                Explore opportunities
+
+            </div>
+
+            <h2>
+                Suggested Career Paths
+            </h2>
+
+            <p>
+                Explore paths related to your profile and interests.
+            </p>
+
+        </div>
+
+        <div class="career-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="search"
+                id="careerSearch"
+                placeholder="Search careers, domains or skills..."
+                autocomplete="off"
+                aria-label="Search career paths">
+
+            <button
+                type="button"
+                class="search-clear"
+                id="careerSearchClear"
+                aria-label="Clear search">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Search Status -->
+    <div class="search-status" id="searchStatus">
+
+        <span class="search-status-dot"></span>
+
+        <span id="searchStatusText">
+            Showing all available career paths
+        </span>
+
+    </div>
+
+    <!-- Career Grid -->
+    <section class="career-grid" id="careerGrid">
+
+        {% for career in career_paths %}
+
+        <article
+            class="career-card career-reveal"
+            data-search="
+                {{ career.title|default('')|lower }}
+                {{ career.description|default('')|lower }}
+                {{ career.domain|default('')|lower }}
+                {{ career.skills|default([])|join(' ')|lower }}
+                {{ career.education|default('')|lower }}
+                {{ career.industry|default('')|lower }}
+                {{ career.related_domains|default([])|join(' ')|lower }}
+            ">
+
+            <!-- Card Top -->
+            <div class="career-card-top">
+
+                <div class="career-icon-wrap">
+
+                    <div class="career-icon">
+
+                        <i class="fa-solid fa-compass"></i>
+
+                    </div>
+
+                    <span class="career-icon-pulse"></span>
+
+                </div>
+
+                {% if career.domain %}
+
+                <span class="career-domain">
+
+                    <i class="fa-solid fa-circle"></i>
+
+                    {{ career.domain }}
+
+                </span>
+
+                {% endif %}
+
+            </div>
+
+            <!-- Title -->
+            <div class="career-card-content">
+
+                <h3>
+                    {{ career.title }}
+                </h3>
+
+                <p class="career-description">
+
+                    {{ career.description|default(
+                        'Explore this career path and identify the '
+                        'skills, knowledge and learning opportunities '
+                        'that can help you prepare for it.'
+                    ) }}
+
+                </p>
+
+            </div>
+
+            <!-- Information -->
+            {% if career.education
+               or career.experience
+               or career.industry
+               or career.salary %}
+
+            <div class="career-info">
+
+                {% if career.education %}
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+
+                        <i class="fa-solid fa-graduation-cap"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Education
+                        </span>
+
+                        <span class="info-value">
+                            {{ career.education }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+                {% if career.experience %}
+
+                <div class="info-item">
+
+                    <div class="info-item-icon cyan">
+
+                        <i class="fa-solid fa-briefcase"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Experience
+                        </span>
+
+                        <span class="info-value">
+                            {{ career.experience }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+                {% if career.industry %}
+
+                <div class="info-item">
+
+                    <div class="info-item-icon orange">
+
+                        <i class="fa-solid fa-building"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Industry
+                        </span>
+
+                        <span class="info-value">
+                            {{ career.industry }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+                {% if career.salary %}
+
+                <div class="info-item">
+
+                    <div class="info-item-icon green">
+
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Salary
+                        </span>
+
+                        <span class="info-value">
+                            {{ career.salary }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+            {% endif %}
+
+            <!-- Skills -->
+            {% if career.skills %}
+
+            <div class="skills-section">
+
+                <div class="subsection-heading">
+
+                    <span>
+
+                        <i class="fa-solid fa-bolt"></i>
+
+                        Key Skills
+
+                    </span>
+
+                </div>
+
+                <div class="skill-tags">
+
+                    {% for skill in career.skills[:6] %}
+
+                    <span class="skill-tag">
+                        {{ skill }}
+                    </span>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+            <!-- Related Domains -->
+            {% if career.related_domains %}
+
+            <div class="related-section">
+
+                <div class="subsection-heading">
+
+                    <span>
+
+                        <i class="fa-solid fa-link"></i>
+
+                        Related Areas
+
+                    </span>
+
+                </div>
+
+                <div class="related-list">
+
+                    {% for related in career.related_domains[:4] %}
+
+                    <span class="related-item">
+
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                        {{ related }}
+
+                    </span>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+            <!-- Footer -->
+            <div class="career-card-footer">
+
+                <div class="career-footer-text">
+
+                    <i class="fa-solid fa-lightbulb"></i>
+
+                    <span>
+                        Build relevant skills through courses
+                        and coding practice.
+                    </span>
+
+                </div>
+
+                <a
+                    href="{{ url_for('courses') }}"
+                    class="explore-btn">
+
+                    <span>
+                        Explore Courses
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+            <div class="card-shine"></div>
+
+        </article>
+
+        {% else %}
+
+        <!-- No Career Data -->
+        <div class="career-empty visible career-reveal">
+
+            <div class="empty-icon">
+
+                <i class="fa-solid fa-route"></i>
+
+            </div>
+
+            <strong>
+                No career paths available yet
+            </strong>
+
+            <span>
+                Add your academic information and skills
+                to get more relevant career suggestions.
+            </span>
+
+        </div>
+
+        {% endfor %}
+
+        <!-- Search Empty -->
+        <div
+            class="career-empty"
+            id="searchEmpty">
+
+            <div class="empty-icon search-empty-icon">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+            </div>
+
+            <strong>
+                No matching career paths
+            </strong>
+
+            <span>
+                Try searching for another career, domain or skill.
+            </span>
+
+            <button
+                type="button"
+                id="resetCareerSearch"
+                class="reset-search-btn">
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+                Clear Search
+
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- Learning CTA -->
+    <section class="learning-cta career-reveal">
+
+        <div class="learning-cta-glow"></div>
+
+        <div class="learning-cta-content">
+
+            <div class="cta-icon">
+
+                <i class="fa-solid fa-rocket"></i>
+
+            </div>
+
+            <div>
+
+                <div class="cta-kicker">
+                    NEXT STEP
+                </div>
+
+                <h3>
+                    Turn a career idea into a learning plan.
+                </h3>
+
+                <p>
+                    Once you identify a direction, use Courses,
+                    Coding Practice and Aptitude sections to build
+                    the skills needed for your next step.
+                </p>
+
+            </div>
+
+        </div>
+
+        <a
+            href="{{ url_for('courses') }}"
+            class="learning-cta-button">
+
+            <span>
+                Browse Courses
+            </span>
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+        <div class="learning-cta-decoration"></div>
+
+    </section>
+
+</div>
+
+<script
+    src="{{ url_for('static', filename='js/career-path.js') }}"
+    defer>
+</script>
+
+{% endblock %}

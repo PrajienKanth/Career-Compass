@@ -1,0 +1,1209 @@
+{% extends "base.html" %}
+
+{% block title %}Aptitude Tests — Career Compass{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/aptitude-test.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="aptitude-page">
+
+    <!-- Ambient Background -->
+    <div class="aptitude-ambient" aria-hidden="true">
+
+        <span class="apt-orb apt-orb-one"></span>
+        <span class="apt-orb apt-orb-two"></span>
+        <span class="apt-orb apt-orb-three"></span>
+
+        <span class="apt-grid"></span>
+
+    </div>
+
+    <!-- Hero -->
+    <section class="aptitude-hero aptitude-reveal">
+
+        <div class="aptitude-hero-content">
+
+            <div class="aptitude-eyebrow">
+
+                <span class="aptitude-eyebrow-icon">
+                    <i class="fa-solid fa-brain"></i>
+                </span>
+
+                Skills Assessment
+
+            </div>
+
+            <h1>
+                Understand your
+                <span>strengths.</span>
+            </h1>
+
+            <p>
+                Assess your logical, verbal, quantitative and
+                technical abilities through focused aptitude tests.
+                Track your results and use them to guide your
+                learning journey.
+            </p>
+
+            <div class="aptitude-hero-meta">
+
+                <div class="hero-meta-item">
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    <span>
+                        Track performance
+                    </span>
+
+                </div>
+
+                <div class="hero-meta-item">
+
+                    <i class="fa-solid fa-repeat"></i>
+
+                    <span>
+                        Retake anytime
+                    </span>
+
+                </div>
+
+                <div class="hero-meta-item">
+
+                    <i class="fa-solid fa-compass"></i>
+
+                    <span>
+                        Discover strengths
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="aptitude-hero-visual"
+             aria-hidden="true">
+
+            <div class="brain-ring brain-ring-one"></div>
+            <div class="brain-ring brain-ring-two"></div>
+
+            <div class="brain-core">
+
+                <i class="fa-solid fa-brain"></i>
+
+            </div>
+
+            <span class="brain-particle brain-particle-one"></span>
+            <span class="brain-particle brain-particle-two"></span>
+            <span class="brain-particle brain-particle-three"></span>
+
+        </div>
+
+    </section>
+
+    <!-- Main Layout -->
+    <div class="aptitude-layout">
+
+        <!-- Left Column -->
+        <aside class="aptitude-sidebar">
+
+            <!-- Available Tests -->
+            <section class="aptitude-panel aptitude-reveal">
+
+                <div class="panel-heading">
+
+                    <div class="panel-heading-icon">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Available Tests
+                        </h2>
+
+                        <p>
+                            Choose an assessment to begin.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="test-list">
+
+                    <!-- Logical -->
+                    <a
+                        href="{{ url_for('take_aptitude_test', test_type='logical') }}"
+                        class="test-option">
+
+                        <div class="test-option-icon logical">
+
+                            <i class="fa-solid fa-puzzle-piece"></i>
+
+                        </div>
+
+                        <div class="test-option-content">
+
+                            <h3>
+                                Logical Reasoning
+                            </h3>
+
+                            <p>
+                                Problem-solving and analytical thinking.
+                            </p>
+
+                        </div>
+
+                        <div class="test-option-status">
+
+                            {% if 'logical' in completed_test_types %}
+
+                            <span class="status completed">
+
+                                <i class="fa-solid fa-check"></i>
+
+                                Completed
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="status pending">
+                                Not taken
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                        <i class="fa-solid fa-chevron-right test-arrow"></i>
+
+                    </a>
+
+                    <!-- Verbal -->
+                    <a
+                        href="{{ url_for('take_aptitude_test', test_type='verbal') }}"
+                        class="test-option">
+
+                        <div class="test-option-icon verbal">
+
+                            <i class="fa-solid fa-comment"></i>
+
+                        </div>
+
+                        <div class="test-option-content">
+
+                            <h3>
+                                Verbal Ability
+                            </h3>
+
+                            <p>
+                                Language comprehension and communication.
+                            </p>
+
+                        </div>
+
+                        <div class="test-option-status">
+
+                            {% if 'verbal' in completed_test_types %}
+
+                            <span class="status completed">
+
+                                <i class="fa-solid fa-check"></i>
+
+                                Completed
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="status pending">
+                                Not taken
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                        <i class="fa-solid fa-chevron-right test-arrow"></i>
+
+                    </a>
+
+                    <!-- Quantitative -->
+                    <a
+                        href="{{ url_for('take_aptitude_test', test_type='quantitative') }}"
+                        class="test-option">
+
+                        <div class="test-option-icon quantitative">
+
+                            <i class="fa-solid fa-calculator"></i>
+
+                        </div>
+
+                        <div class="test-option-content">
+
+                            <h3>
+                                Quantitative Aptitude
+                            </h3>
+
+                            <p>
+                                Mathematical and numerical reasoning.
+                            </p>
+
+                        </div>
+
+                        <div class="test-option-status">
+
+                            {% if 'quantitative' in completed_test_types %}
+
+                            <span class="status completed">
+
+                                <i class="fa-solid fa-check"></i>
+
+                                Completed
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="status pending">
+                                Not taken
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                        <i class="fa-solid fa-chevron-right test-arrow"></i>
+
+                    </a>
+
+                    <!-- Technical -->
+                    <a
+                        href="{{ url_for('take_aptitude_test', test_type='technical') }}"
+                        class="test-option">
+
+                        <div class="test-option-icon technical">
+
+                            <i class="fa-solid fa-microchip"></i>
+
+                        </div>
+
+                        <div class="test-option-content">
+
+                            <h3>
+                                Technical Knowledge
+                            </h3>
+
+                            <p>
+                                Technical and domain-specific knowledge.
+                            </p>
+
+                        </div>
+
+                        <div class="test-option-status">
+
+                            {% if 'technical' in completed_test_types %}
+
+                            <span class="status completed">
+
+                                <i class="fa-solid fa-check"></i>
+
+                                Completed
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="status pending">
+                                Not taken
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                        <i class="fa-solid fa-chevron-right test-arrow"></i>
+
+                    </a>
+
+                </div>
+
+                <div class="aptitude-info-box">
+
+                    <div class="info-box-icon">
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Flexible practice
+                        </strong>
+
+                        <p>
+                            Each test contains multiple-choice questions.
+                            You can retake tests to improve your scores.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- Why Tests -->
+            <section class="aptitude-panel why-panel aptitude-reveal">
+
+                <div class="panel-heading">
+
+                    <div class="panel-heading-icon cyan">
+
+                        <i class="fa-solid fa-circle-question"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Why Take These Tests?
+                        </h2>
+
+                        <p>
+                            Use assessments as a learning signal.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="why-list">
+
+                    <div class="why-item">
+
+                        <div class="why-icon purple">
+
+                            <i class="fa-solid fa-lightbulb"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Discover Your Strengths
+                            </h3>
+
+                            <p>
+                                Identify areas where you perform well
+                                and use them to guide your learning.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="why-item">
+
+                        <div class="why-icon green">
+
+                            <i class="fa-solid fa-chart-line"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Track Your Progress
+                            </h3>
+
+                            <p>
+                                Compare your performance as you
+                                practice and develop new skills.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="why-item">
+
+                        <div class="why-icon orange">
+
+                            <i class="fa-solid fa-bullseye"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Find Improvement Areas
+                            </h3>
+
+                            <p>
+                                Identify topics that may benefit from
+                                additional focused practice.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="why-item">
+
+                        <div class="why-icon cyan">
+
+                            <i class="fa-solid fa-briefcase"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Prepare for Assessments
+                            </h3>
+
+                            <p>
+                                Practice question formats similar to
+                                those commonly used in job assessments.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </aside>
+
+        <!-- Right Column -->
+        <main class="aptitude-main">
+
+            <!-- Results -->
+            <section class="aptitude-panel results-panel aptitude-reveal">
+
+                <div class="panel-heading results-heading">
+
+                    <div class="panel-heading-icon">
+
+                        <i class="fa-solid fa-chart-column"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Your Test Results
+                        </h2>
+
+                        <p>
+                            Review your latest aptitude performance.
+                        </p>
+
+                    </div>
+
+                    {% if completed_tests %}
+
+                    <div class="results-count">
+
+                        <strong>
+                            {{ completed_tests|length }}
+                        </strong>
+
+                        <span>
+                            Tests completed
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                {% if completed_tests %}
+
+                <!-- Chart -->
+                <div class="chart-wrapper">
+
+                    <div class="chart-header">
+
+                        <div>
+
+                            <span class="chart-label">
+                                PERFORMANCE OVERVIEW
+                            </span>
+
+                            <h3>
+                                Aptitude Performance
+                            </h3>
+
+                        </div>
+
+                        <div class="chart-indicator">
+
+                            <span></span>
+
+                            Score %
+
+                        </div>
+
+                    </div>
+
+                    <div class="chart-container">
+
+                        <canvas
+                            id="aptitude-results-chart"
+                            width="400"
+                            height="250">
+                        </canvas>
+
+                    </div>
+
+                </div>
+
+                <!-- Result Cards -->
+                <div class="result-grid">
+
+                    {% for test in completed_tests %}
+
+                    <article
+                        class="result-card aptitude-reveal"
+                        data-test-type="{{ test.test_type }}"
+                        data-score="{{ test.score }}"
+                        data-max-score="{{ test.max_score }}"
+                        data-percentage="{{ test.get_percentage() }}">
+
+                        <div class="result-card-top">
+
+                            <div class="result-type">
+
+                                <div class="result-icon
+                                    {% if test.test_type == 'logical' %}
+                                        logical
+                                    {% elif test.test_type == 'verbal' %}
+                                        verbal
+                                    {% elif test.test_type == 'quantitative' %}
+                                        quantitative
+                                    {% elif test.test_type == 'technical' %}
+                                        technical
+                                    {% else %}
+                                        default
+                                    {% endif %}">
+
+                                    {% if test.test_type == 'logical' %}
+
+                                    <i class="fa-solid fa-puzzle-piece"></i>
+
+                                    {% elif test.test_type == 'verbal' %}
+
+                                    <i class="fa-solid fa-comment"></i>
+
+                                    {% elif test.test_type == 'quantitative' %}
+
+                                    <i class="fa-solid fa-calculator"></i>
+
+                                    {% elif test.test_type == 'technical' %}
+
+                                    <i class="fa-solid fa-microchip"></i>
+
+                                    {% else %}
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <div>
+
+                                    <span class="result-category">
+                                        Aptitude Test
+                                    </span>
+
+                                    <h3>
+
+                                        {% if test.test_type == 'logical' %}
+
+                                            Logical Reasoning
+
+                                        {% elif test.test_type == 'verbal' %}
+
+                                            Verbal Ability
+
+                                        {% elif test.test_type == 'quantitative' %}
+
+                                            Quantitative Aptitude
+
+                                        {% elif test.test_type == 'technical' %}
+
+                                            Technical Knowledge
+
+                                        {% else %}
+
+                                            {{ test.test_type.capitalize() }}
+
+                                        {% endif %}
+
+                                    </h3>
+
+                                </div>
+
+                            </div>
+
+                            <span class="result-status">
+
+                                <i class="fa-solid fa-circle-check"></i>
+
+                            </span>
+
+                        </div>
+
+                        <!-- Score -->
+                        <div class="score-block">
+
+                            <div class="score-number">
+
+                                <strong>
+                                    {{ test.score }}
+                                </strong>
+
+                                <span>
+                                    / {{ test.max_score }}
+                                </span>
+
+                            </div>
+
+                            <div class="score-percentage">
+
+                                {{ "%.1f"|format(test.get_percentage()) }}%
+
+                            </div>
+
+                        </div>
+
+                        <!-- Progress -->
+                        <div class="result-progress">
+
+                            <div class="progress-track">
+
+                                <div
+                                    class="progress-fill
+                                    {% if test.get_percentage() >= 80 %}
+                                        excellent
+                                    {% elif test.get_percentage() >= 60 %}
+                                        good
+                                    {% elif test.get_percentage() >= 40 %}
+                                        average
+                                    {% else %}
+                                        low
+                                    {% endif %}"
+                                    data-progress="{{ test.get_percentage() }}">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="result-meta">
+
+                            <span>
+
+                                <i class="fa-regular fa-calendar"></i>
+
+                                {{ test.completed_date.strftime('%B %d, %Y') }}
+
+                            </span>
+
+                        </div>
+
+                        <!-- Performance Message -->
+                        <div class="performance-message
+                            {% if test.get_percentage() >= 80 %}
+                                excellent
+                            {% elif test.get_percentage() >= 60 %}
+                                good
+                            {% elif test.get_percentage() >= 40 %}
+                                average
+                            {% else %}
+                                low
+                            {% endif %}">
+
+                            {% if test.get_percentage() >= 80 %}
+
+                            <i class="fa-solid fa-trophy"></i>
+
+                            <span>
+                                Excellent performance
+                            </span>
+
+                            {% elif test.get_percentage() >= 60 %}
+
+                            <i class="fa-solid fa-thumbs-up"></i>
+
+                            <span>
+                                Good performance
+                            </span>
+
+                            {% elif test.get_percentage() >= 40 %}
+
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+
+                            <span>
+                                Room for improvement
+                            </span>
+
+                            {% else %}
+
+                            <i class="fa-solid fa-dumbbell"></i>
+
+                            <span>
+                                More practice recommended
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                        <!-- Retake -->
+                        <a
+                            href="{{ url_for('take_aptitude_test', test_type=test.test_type) }}"
+                            class="retake-btn">
+
+                            <span>
+                                Retake Test
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+                    </article>
+
+                    {% endfor %}
+
+                </div>
+
+                {% else %}
+
+                <!-- No Results -->
+                <div class="no-results">
+
+                    <div class="no-results-visual">
+
+                        <div class="no-results-ring"></div>
+
+                        <div class="no-results-icon">
+
+                            <i class="fa-solid fa-brain"></i>
+
+                        </div>
+
+                    </div>
+
+                    <h3>
+                        No tests completed yet
+                    </h3>
+
+                    <p>
+                        Take your first aptitude test to assess
+                        your skills and see your results here.
+                    </p>
+
+                    <a
+                        href="{{ url_for('take_aptitude_test', test_type='logical') }}"
+                        class="primary-action">
+
+                        <i class="fa-solid fa-puzzle-piece"></i>
+
+                        <span>
+                            Start with Logical Reasoning
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+                {% endif %}
+
+            </section>
+
+            <!-- Career Recommendations -->
+            <section class="aptitude-panel recommendations-panel aptitude-reveal">
+
+                <div class="panel-heading">
+
+                    <div class="panel-heading-icon orange">
+
+                        <i class="fa-solid fa-trophy"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Career Insights From Your Results
+                        </h2>
+
+                        <p>
+                            Use your performance areas as one input
+                            when exploring career possibilities.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {% if completed_tests %}
+
+                    {% set logical_test =
+                        completed_tests
+                        |selectattr('test_type', 'equalto', 'logical')
+                        |first
+                    %}
+
+                    {% set verbal_test =
+                        completed_tests
+                        |selectattr('test_type', 'equalto', 'verbal')
+                        |first
+                    %}
+
+                    {% set quant_test =
+                        completed_tests
+                        |selectattr('test_type', 'equalto', 'quantitative')
+                        |first
+                    %}
+
+                    {% set tech_test =
+                        completed_tests
+                        |selectattr('test_type', 'equalto', 'technical')
+                        |first
+                    %}
+
+                    <div class="strength-grid">
+
+                        {% if logical_test and logical_test.get_percentage() >= 70 %}
+
+                        <article class="strength-card aptitude-reveal">
+
+                            <div class="strength-icon logical">
+
+                                <i class="fa-solid fa-puzzle-piece"></i>
+
+                            </div>
+
+                            <div class="strength-content">
+
+                                <span class="strength-label">
+                                    Strong Area
+                                </span>
+
+                                <h3>
+                                    Logical Reasoning
+                                </h3>
+
+                                <p>
+                                    Your result indicates strong performance
+                                    in logical reasoning and analytical
+                                    problem-solving.
+                                </p>
+
+                                <div class="career-tags">
+
+                                    <span>
+                                        Software Development
+                                    </span>
+
+                                    <span>
+                                        Data Analysis
+                                    </span>
+
+                                    <span>
+                                        Research
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                        {% endif %}
+
+                        {% if verbal_test and verbal_test.get_percentage() >= 70 %}
+
+                        <article class="strength-card aptitude-reveal">
+
+                            <div class="strength-icon verbal">
+
+                                <i class="fa-solid fa-comment"></i>
+
+                            </div>
+
+                            <div class="strength-content">
+
+                                <span class="strength-label">
+                                    Strong Area
+                                </span>
+
+                                <h3>
+                                    Verbal Ability
+                                </h3>
+
+                                <p>
+                                    Your result indicates strong verbal
+                                    ability and communication-oriented
+                                    skills.
+                                </p>
+
+                                <div class="career-tags">
+
+                                    <span>
+                                        Technical Writing
+                                    </span>
+
+                                    <span>
+                                        Content Creation
+                                    </span>
+
+                                    <span>
+                                        Training
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                        {% endif %}
+
+                        {% if quant_test and quant_test.get_percentage() >= 70 %}
+
+                        <article class="strength-card aptitude-reveal">
+
+                            <div class="strength-icon quantitative">
+
+                                <i class="fa-solid fa-calculator"></i>
+
+                            </div>
+
+                            <div class="strength-content">
+
+                                <span class="strength-label">
+                                    Strong Area
+                                </span>
+
+                                <h3>
+                                    Quantitative Aptitude
+                                </h3>
+
+                                <p>
+                                    Your result indicates strong numerical
+                                    reasoning and mathematical analysis.
+                                </p>
+
+                                <div class="career-tags">
+
+                                    <span>
+                                        Financial Analysis
+                                    </span>
+
+                                    <span>
+                                        Data Science
+                                    </span>
+
+                                    <span>
+                                        Actuarial Science
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                        {% endif %}
+
+                        {% if tech_test and tech_test.get_percentage() >= 70 %}
+
+                        <article class="strength-card aptitude-reveal">
+
+                            <div class="strength-icon technical">
+
+                                <i class="fa-solid fa-microchip"></i>
+
+                            </div>
+
+                            <div class="strength-content">
+
+                                <span class="strength-label">
+                                    Strong Area
+                                </span>
+
+                                <h3>
+                                    Technical Knowledge
+                                </h3>
+
+                                <p>
+                                    Your result indicates strong technical
+                                    and domain-specific knowledge.
+                                </p>
+
+                                <div class="career-tags">
+
+                                    <span>
+                                        Systems Architecture
+                                    </span>
+
+                                    <span>
+                                        DevOps
+                                    </span>
+
+                                    <span>
+                                        Cybersecurity
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                        {% endif %}
+
+                        {% if not (
+                            (logical_test and logical_test.get_percentage() >= 70)
+                            or
+                            (verbal_test and verbal_test.get_percentage() >= 70)
+                            or
+                            (quant_test and quant_test.get_percentage() >= 70)
+                            or
+                            (tech_test and tech_test.get_percentage() >= 70)
+                        ) %}
+
+                        <div class="recommendation-empty">
+
+                            <div class="recommendation-empty-icon">
+
+                                <i class="fa-solid fa-chart-line"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Keep building your results
+                                </h3>
+
+                                <p>
+                                    Complete more tests or improve your
+                                    scores to see additional performance
+                                    insights here.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    <!-- AI Advisor -->
+                    <div class="advisor-cta">
+
+                        <div class="advisor-cta-icon">
+
+                            <i class="fa-solid fa-robot"></i>
+
+                        </div>
+
+                        <div class="advisor-cta-content">
+
+                            <span>
+                                PERSONALIZED GUIDANCE
+                            </span>
+
+                            <h3>
+                                Want to explore your results further?
+                            </h3>
+
+                            <p>
+                                Use the AI Advisor to discuss your skills,
+                                interests and learning direction.
+                            </p>
+
+                        </div>
+
+                        <a
+                            href="{{ url_for('ai_advisor') }}"
+                            class="advisor-btn">
+
+                            <span>
+                                Get Career Advice
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+                {% else %}
+
+                <div class="recommendation-empty standalone">
+
+                    <div class="recommendation-empty-icon">
+
+                        <i class="fa-solid fa-chart-simple"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Complete an aptitude test first
+                        </h3>
+
+                        <p>
+                            Your performance insights will appear
+                            here after you complete an assessment.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script
+    src="{{ url_for('static', filename='js/aptitude-test.js') }}"
+    defer>
+</script>
+
+{% endblock %}

@@ -1,0 +1,857 @@
+{% extends "base.html" %}
+
+{% block title %}AI Career Advisor — Career Compass{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ai-advisor.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="ai-advisor-page">
+
+    <!-- Ambient Background -->
+    <div class="ai-bg-orb ai-bg-orb-one"></div>
+    <div class="ai-bg-orb ai-bg-orb-two"></div>
+    <div class="ai-bg-orb ai-bg-orb-three"></div>
+    <div class="ai-bg-grid"></div>
+
+    <div class="ai-floating-particle particle-one"></div>
+    <div class="ai-floating-particle particle-two"></div>
+    <div class="ai-floating-particle particle-three"></div>
+    <div class="ai-floating-particle particle-four"></div>
+
+    <!-- Hero -->
+    <section class="ai-hero ai-reveal">
+
+        <div class="ai-hero-glow"></div>
+
+        <div class="ai-hero-content">
+
+            <div class="ai-eyebrow">
+
+                <span class="ai-eyebrow-icon">
+                    <i class="fa-solid fa-sparkles"></i>
+                </span>
+
+                <span>AI Career Advisor</span>
+
+                <span class="ai-live-pill">
+                    <span></span>
+                    LIVE
+                </span>
+
+            </div>
+
+            <h1>
+                Your career questions,
+                <span>one conversation away.</span>
+            </h1>
+
+            <p>
+                Ask about career paths, skills, courses, projects,
+                interview preparation or what you can learn next.
+                Career Compass AI uses the information in your profile
+                to make the conversation more relevant.
+            </p>
+
+            <div class="ai-hero-meta">
+
+                <div class="hero-meta-item">
+
+                    <span class="meta-icon">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </span>
+
+                    <span>Personalized guidance</span>
+
+                </div>
+
+                <div class="hero-meta-item">
+
+                    <span class="meta-icon cyan">
+                        <i class="fa-solid fa-bolt"></i>
+                    </span>
+
+                    <span>Interactive conversation</span>
+
+                </div>
+
+                <div class="hero-meta-item">
+
+                    <span class="meta-icon orange">
+                        <i class="fa-solid fa-compass"></i>
+                    </span>
+
+                    <span>Career focused</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="ai-hero-orbit">
+
+            <div class="orbit-ring orbit-ring-one"></div>
+            <div class="orbit-ring orbit-ring-two"></div>
+            <div class="orbit-ring orbit-ring-three"></div>
+
+            <div class="orbit-core">
+
+                <div class="orbit-core-inner">
+                    <i class="fa-solid fa-sparkles"></i>
+                </div>
+
+            </div>
+
+            <span class="orbit-dot orbit-dot-one"></span>
+            <span class="orbit-dot orbit-dot-two"></span>
+            <span class="orbit-dot orbit-dot-three"></span>
+
+        </div>
+
+    </section>
+
+    <!-- Main Layout -->
+    <div class="ai-layout">
+
+        <!-- Chat -->
+        <section class="chat-card ai-reveal">
+
+            <!-- Chat Header -->
+            <header class="chat-header">
+
+                <div class="ai-identity">
+
+                    <div class="ai-avatar">
+
+                        <span class="avatar-pulse"></span>
+                        <span class="avatar-ring"></span>
+
+                        <i class="fa-solid fa-sparkles"></i>
+
+                    </div>
+
+                    <div class="ai-identity-text">
+
+                        <strong>
+                            Career Compass AI
+                        </strong>
+
+                        <span class="ai-status">
+
+                            <span class="status-dot"></span>
+
+                            <span id="aiStatusText">
+                                Ready to help
+                            </span>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="chat-header-actions">
+
+                    <button type="button" class="chat-action" id="clearChat" title="Clear conversation"
+                        aria-label="Clear conversation">
+
+                        <i class="fa-solid fa-trash-can"></i>
+
+                    </button>
+
+                </div>
+
+            </header>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chatMessages"
+                data-profile-image="{{ url_for('static', filename='uploads/' ~ current_user.profile_photo) }}"
+                data-ai-logo="{{ url_for('static', filename='images/logo.svg') }}">
+
+                {% if chat_history %}
+
+                {% for chat in chat_history %}
+
+                <!-- User Message -->
+                <div class="message-row user ai-message-reveal">
+
+                    <div class="message-avatar user-message-avatar">
+                
+                        <img
+                            src="{{ url_for('static', filename='uploads/' ~ current_user.profile_photo) }}"
+                            alt="{{ current_user.username }}"
+                            onerror="this.style.display='none'; this.parentElement.classList.add('avatar-fallback');"
+                        >
+                
+                        <i class="fa-solid fa-user avatar-fallback-icon"></i>
+                
+                    </div>
+                
+                    <div class="message-content">
+                
+                        <div class="message-topline">
+                
+                            <span class="message-name">
+                                You
+                            </span>
+                
+                            <span class="message-time">
+                                <i class="fa-regular fa-message"></i>
+                            </span>
+                
+                        </div>
+                
+                        <div class="message-bubble user-bubble">
+                
+                            {{ chat.message }}
+                
+                        </div>
+                
+                    </div>
+                
+                </div>
+
+
+                <!-- AI Message -->
+                <div class="message-row ai ai-message-reveal">
+
+                    <div class="message-avatar ai-message-avatar">
+
+                        <span class="message-avatar-glow"></span>
+
+                        <img src="{{ url_for('static', filename='images/logo.svg') }}"
+                            alt="Career Compass AI" onerror="this.style.display='none';">
+
+                    </div>
+
+                    <div class="message-content">
+
+                        <div class="message-topline">
+
+                            <span class="message-name">
+                                Career Compass AI
+                            </span>
+
+                            <span class="ai-response-label">
+
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                                AI
+
+                            </span>
+
+                        </div>
+
+                        <div class="message-bubble ai-bubble">
+
+                            <div class="ai-response-text">
+                                {{ chat.response }}
+                            </div>
+
+                        </div>
+
+
+                        <!-- Speech Controls -->
+                        <div class="speech-panel">
+
+                            <div class="speech-panel-main">
+
+                                <button type="button" class="speech-button speech-play" data-speech-action="play"
+                                    aria-label="Read response aloud" title="Read response aloud">
+                                    <i class="fa-solid fa-play"></i>
+                                </button>
+
+                                <button type="button" class="speech-button speech-pause" data-speech-action="pause"
+                                    aria-label="Pause speech" title="Pause speech" hidden>
+                                    <i class="fa-solid fa-pause"></i>
+                                </button>
+
+                                <button type="button" class="speech-button speech-resume" data-speech-action="resume"
+                                    aria-label="Resume speech" title="Resume speech" hidden>
+                                    <i class="fa-solid fa-play"></i>
+                                </button>
+
+                                <button type="button" class="speech-button speech-stop" data-speech-action="stop"
+                                    aria-label="Stop speech" title="Stop speech" hidden>
+                                    <i class="fa-solid fa-stop"></i>
+                                </button>
+
+                                <div class="speech-info">
+
+                                    <span class="speech-status">
+
+                                        <i class="fa-solid fa-volume-high"></i>
+
+                                        <span data-speech-status>
+                                            Listen to response
+                                        </span>
+
+                                    </span>
+
+                                    <span class="speech-progress-text" data-speech-progress>
+                                        0%
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="speech-progress">
+
+                                <div class="speech-progress-bar" data-speech-progress-bar></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Live Speech Text -->
+                        <div class="speech-text-panel" data-speech-text-panel hidden>
+
+                            <div class="speech-text-header">
+
+                                <span>
+
+                                    <i class="fa-solid fa-wave-square"></i>
+
+                                    Currently speaking
+
+                                </span>
+
+                                <span class="speech-live-dot">
+                                    LIVE
+                                </span>
+
+                            </div>
+
+                            <div class="speech-text-content" data-speech-live-text></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+                {% else %}
+
+                <!-- Welcome -->
+                <div class="chat-welcome" id="chatWelcome">
+
+                    <div class="welcome-icon-wrap">
+
+                        <div class="welcome-icon">
+
+                            <span class="welcome-icon-glow"></span>
+
+                            <i class="fa-solid fa-sparkles"></i>
+
+                        </div>
+
+                        <span class="welcome-orbit welcome-orbit-one"></span>
+                        <span class="welcome-orbit welcome-orbit-two"></span>
+
+                    </div>
+
+                    <div class="welcome-badge">
+
+                        <span></span>
+
+                        AI CAREER GUIDE
+
+                    </div>
+
+                    <h2>
+
+                        What would you like
+                        <span>to work on?</span>
+
+                    </h2>
+
+                    <p>
+
+                        Ask me about careers, learning paths,
+                        technical skills, projects, interviews,
+                        coding practice or your next step.
+
+                    </p>
+
+                    <div class="suggestion-list">
+
+                        <button type="button" class="suggestion-btn"
+                            data-question="What career paths can I explore based on my current skills?">
+
+                            <span class="suggestion-icon">
+
+                                <i class="fa-solid fa-route"></i>
+
+                            </span>
+
+                            <span class="suggestion-content">
+
+                                <strong>
+                                    Career paths
+                                </strong>
+
+                                <small>
+                                    Explore roles that match my skills
+                                </small>
+
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right suggestion-arrow"></i>
+
+                        </button>
+
+
+                        <button type="button" class="suggestion-btn"
+                            data-question="What skills should I improve for an AI or machine learning career?">
+
+                            <span class="suggestion-icon cyan">
+
+                                <i class="fa-solid fa-brain"></i>
+
+                            </span>
+
+                            <span class="suggestion-content">
+
+                                <strong>
+                                    Skills to improve
+                                </strong>
+
+                                <small>
+                                    Find the skills I should learn next
+                                </small>
+
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right suggestion-arrow"></i>
+
+                        </button>
+
+
+                        <button type="button" class="suggestion-btn"
+                            data-question="What projects should I build to strengthen my portfolio?">
+
+                            <span class="suggestion-icon orange">
+
+                                <i class="fa-solid fa-laptop-code"></i>
+
+                            </span>
+
+                            <span class="suggestion-content">
+
+                                <strong>
+                                    Portfolio projects
+                                </strong>
+
+                                <small>
+                                    Build projects that show my ability
+                                </small>
+
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right suggestion-arrow"></i>
+
+                        </button>
+
+
+                        <button type="button" class="suggestion-btn"
+                            data-question="How should I prepare for a technical interview as a fresher?">
+
+                            <span class="suggestion-icon green">
+
+                                <i class="fa-solid fa-comments"></i>
+
+                            </span>
+
+                            <span class="suggestion-content">
+
+                                <strong>
+                                    Interview preparation
+                                </strong>
+
+                                <small>
+                                    Practice for technical interviews
+                                </small>
+
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right suggestion-arrow"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- Typing Indicator -->
+                <div class="message-row typing-row" id="typingIndicator" hidden>
+
+                    <div class="message-avatar ai-message-avatar">
+
+                        <span class="message-avatar-glow"></span>
+
+                        <img src="{{ url_for('static', filename='images/career-compass-logo.png') }}"
+                            alt="Career Compass AI" onerror="this.style.display='none';">
+
+                    </div>
+
+                    <div class="message-content">
+
+                        <div class="message-topline">
+
+                            <span class="message-name">
+                                Career Compass AI
+                            </span>
+
+                            <span class="ai-thinking-label">
+                                THINKING
+                            </span>
+
+                        </div>
+
+                        <div class="typing-bubble">
+
+                            <div class="thinking-animation">
+
+                                <span class="thinking-core"></span>
+
+                                <span class="thinking-ring ring-one"></span>
+                                <span class="thinking-ring ring-two"></span>
+
+                            </div>
+
+                            <span class="typing-label">
+                                Thinking
+                            </span>
+
+                            <span class="typing-dots">
+
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            
+
+            <!-- Chat Input -->
+            <div class="chat-input-area">
+
+                <div class="voice-status" id="voiceStatus" hidden>
+
+                    <span class="voice-animation">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </span>
+
+                    <span id="voiceStatusText">
+                        Listening...
+                    </span>
+
+                    <button type="button" id="stopVoice" aria-label="Stop voice recognition">
+
+                        <i class="fa-solid fa-stop"></i>
+
+                    </button>
+
+                </div>
+
+                <div class="chat-input-wrap">
+
+                    <button type="button" id="voiceInput" class="voice-button" aria-label="Use voice input"
+                        title="Speak your message">
+
+                        <i class="fa-solid fa-microphone"></i>
+
+                    </button>
+
+                    <textarea id="chatInput" class="chat-input" rows="1" maxlength="2000"
+                        placeholder="Ask Career Compass anything about your career..."
+                        aria-label="Message Career Compass AI"></textarea>
+
+                    <button type="button" id="sendMessage" class="send-button" aria-label="Send message">
+
+                        <i class="fa-solid fa-arrow-up"></i>
+
+                    </button>
+
+                </div>
+
+                <div class="input-footer">
+
+                    <div class="input-note">
+
+                        <i class="fa-solid fa-microphone-lines"></i>
+
+                        <span>
+                            Speak naturally or type your question
+                        </span>
+
+                    </div>
+
+                    <span class="character-count" id="characterCount">
+                        0 / 2000
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Side Panel -->
+        <aside class="ai-side">
+
+            <!-- Profile Context -->
+            <div class="side-card ai-reveal">
+
+                <div class="side-card-glow"></div>
+
+                <div class="side-heading">
+
+                    <div class="side-heading-icon">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Your Context
+                        </strong>
+
+                        <span>
+                            Used to personalize guidance
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="context-item">
+
+                    <div class="context-icon">
+
+                        <i class="fa-solid fa-graduation-cap"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Academic Domain
+                        </span>
+
+                        <strong>
+                            {{ current_user.academic_domain or 'Not specified' }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <div class="context-item">
+
+                    <div class="context-icon cyan">
+
+                        <i class="fa-solid fa-microchip"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Specialization
+                        </span>
+
+                        <strong>
+                            {{ current_user.specialization or 'Not specified' }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <div class="context-item">
+
+                    <div class="context-icon orange">
+
+                        <i class="fa-solid fa-code"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Skills
+                        </span>
+
+                        <strong>
+
+                            {% set user_skills = current_user.get_skills() %}
+
+                            {% if user_skills %}
+                            {{ user_skills|length }} skill areas added
+                            {% else %}
+                            No skills added yet
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Quick Links -->
+            <div class="side-card ai-reveal">
+
+                <div class="side-heading">
+
+                    <div class="side-heading-icon cyan">
+
+                        <i class="fa-solid fa-bolt"></i>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Continue Learning
+                        </strong>
+
+                        <span>
+                            Explore Career Compass
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <a href="{{ url_for('career_path') }}" class="side-link">
+
+                    <span>
+
+                        <i class="fa-solid fa-route"></i>
+
+                        Career Paths
+
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+                <a href="{{ url_for('courses') }}" class="side-link">
+
+                    <span>
+
+                        <i class="fa-solid fa-book-open"></i>
+
+                        Browse Courses
+
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+                <a href="{{ url_for('coding_practice') }}" class="side-link">
+
+                    <span>
+
+                        <i class="fa-solid fa-code"></i>
+
+                        Coding Practice
+
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+                <a href="{{ url_for('aptitude_test') }}" class="side-link">
+
+                    <span>
+
+                        <i class="fa-solid fa-brain"></i>
+
+                        Aptitude Tests
+
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+            <!-- AI Tip -->
+            <div class="ai-tip-card ai-reveal">
+
+                <div class="tip-icon">
+
+                    <i class="fa-solid fa-lightbulb"></i>
+
+                </div>
+
+                <div>
+
+                    <strong>
+                        Tip
+                    </strong>
+
+                    <p>
+
+                        Give specific details about your goal.
+                        The more context you provide, the more
+                        useful your career guidance can be.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{{ url_for('static', filename='js/chat.js') }}" defer>
+</script>
+
+<script src="{{ url_for('static', filename='js/ai-advisor.js') }}" defer>
+</script>
+
+{% endblock %}

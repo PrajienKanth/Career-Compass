@@ -1,0 +1,1201 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile — Career Compass{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="profile-page">
+
+
+<!-- Ambient Background -->
+
+<div class="profile-ambient" aria-hidden="true">
+
+    <span class="profile-orb profile-orb-one"></span>
+    <span class="profile-orb profile-orb-two"></span>
+    <span class="profile-orb profile-orb-three"></span>
+    <span class="profile-grid-lines"></span>
+
+</div>
+
+<!-- Page Header -->
+
+<section class="profile-header profile-reveal">
+
+    <div class="profile-header-glow"></div>
+
+    <div class="profile-header-inner">
+
+        <div class="profile-identity">
+
+            <div class="profile-avatar-wrap">
+
+                <div class="profile-avatar-large">
+
+                    {% if current_user.profile_photo
+                          and current_user.profile_photo != 'default_profile.jpg' %}
+
+                        <img
+                            src="{{ url_for(
+                                'static',
+                                filename='uploads/' ~ current_user.profile_photo
+                            ) }}"
+                            alt="{{ current_user.username }}"
+                        >
+
+                    {% else %}
+
+                        <span>
+                            {{ current_user.username[:1]|upper }}
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+                <span class="profile-online-dot"></span>
+
+            </div>
+
+            <div class="profile-title">
+
+                <div class="profile-welcome">
+                    <i class="fa-solid fa-sparkles"></i>
+                    YOUR CAREER PROFILE
+                </div>
+
+                <h1>
+                    {{ current_user.username }}
+                </h1>
+
+                <p>
+                    {{ current_user.email }}
+                </p>
+
+                <div class="profile-meta">
+
+                    {% if current_user.academic_domain %}
+
+                    <span>
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        {{ current_user.academic_domain }}
+                    </span>
+
+                    {% endif %}
+
+                    {% if current_user.specialization %}
+
+                    <span>
+                        <i class="fa-solid fa-code"></i>
+                        {{ current_user.specialization }}
+                    </span>
+
+                    {% endif %}
+
+                    <span>
+                        <i class="fa-regular fa-calendar"></i>
+
+                        Joined
+                        {{ current_user.joined_date.strftime('%b %Y')
+                           if current_user.joined_date
+                           else 'Recently' }}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <a
+            href="{{ url_for('edit_profile') }}"
+            class="profile-edit-btn"
+        >
+
+            <span class="edit-icon">
+                <i class="fa-solid fa-pen"></i>
+            </span>
+
+            <span>Edit Profile</span>
+
+            <i class="fa-solid fa-arrow-right edit-arrow"></i>
+
+        </a>
+
+    </div>
+
+    <!-- Profile Completeness -->
+
+    {% set completion = 0 %}
+
+    {% if current_user.username %}
+        {% set completion = completion + 15 %}
+    {% endif %}
+
+    {% if current_user.email %}
+        {% set completion = completion + 15 %}
+    {% endif %}
+
+    {% if current_user.profile_photo
+          and current_user.profile_photo != 'default_profile.jpg' %}
+        {% set completion = completion + 10 %}
+    {% endif %}
+
+    {% if current_user.date_of_birth %}
+        {% set completion = completion + 10 %}
+    {% endif %}
+
+    {% if current_user.academic_domain %}
+        {% set completion = completion + 15 %}
+    {% endif %}
+
+    {% if current_user.specialization %}
+        {% set completion = completion + 15 %}
+    {% endif %}
+
+    {% if current_user.hobbies %}
+        {% set completion = completion + 5 %}
+    {% endif %}
+
+    {% if current_user.extracurricular %}
+        {% set completion = completion + 5 %}
+    {% endif %}
+
+    <div
+        class="profile-completion"
+        data-completion="{{ completion }}"
+    >
+
+        <div class="completion-top">
+
+            <div class="completion-label">
+
+                <span class="completion-icon">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </span>
+
+                <div>
+
+                    <strong>Profile completeness</strong>
+
+                    <small>
+                        Keep your profile updated for better recommendations.
+                    </small>
+
+                </div>
+
+            </div>
+
+            <span class="completion-percent">
+
+                <span data-count="{{ completion }}">0</span>%
+
+            </span>
+
+        </div>
+
+        <div class="completion-bar">
+
+            <div
+                class="completion-fill"
+                data-width="{{ completion }}"
+            ></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Profile Stats -->
+
+<section class="profile-stats">
+
+    <div
+        class="profile-stat profile-reveal"
+        data-tilt
+    >
+
+        <div class="stat-icon stat-purple">
+            <i class="fa-solid fa-layer-group"></i>
+        </div>
+
+        <div class="stat-info">
+
+            <strong data-count="{{ skills|length if skills else 0 }}">
+                0
+            </strong>
+
+            <span>Skills tracked</span>
+
+        </div>
+
+        <div class="stat-decoration">
+            <i class="fa-solid fa-arrow-up-right"></i>
+        </div>
+
+    </div>
+
+    <div
+        class="profile-stat profile-reveal"
+        data-tilt
+    >
+
+        <div class="stat-icon stat-cyan">
+            <i class="fa-solid fa-book-bookmark"></i>
+        </div>
+
+        <div class="stat-info">
+
+            <strong data-count="{{ saved_courses|length if saved_courses else 0 }}">
+                0
+            </strong>
+
+            <span>Saved courses</span>
+
+        </div>
+
+        <div class="stat-decoration">
+            <i class="fa-solid fa-arrow-up-right"></i>
+        </div>
+
+    </div>
+
+    <div
+        class="profile-stat profile-reveal"
+        data-tilt
+    >
+
+        <div class="stat-icon stat-orange">
+            <i class="fa-solid fa-code"></i>
+        </div>
+
+        <div class="stat-info">
+
+            <strong data-count="{{ submissions|length if submissions else 0 }}">
+                0
+            </strong>
+
+            <span>Coding submissions</span>
+
+        </div>
+
+        <div class="stat-decoration">
+            <i class="fa-solid fa-arrow-up-right"></i>
+        </div>
+
+    </div>
+
+    <div
+        class="profile-stat profile-reveal"
+        data-tilt
+    >
+
+        <div class="stat-icon stat-green">
+            <i class="fa-solid fa-brain"></i>
+        </div>
+
+        <div class="stat-info">
+
+            <strong data-count="{{ aptitude_results|length if aptitude_results else 0 }}">
+                0
+            </strong>
+
+            <span>Tests completed</span>
+
+        </div>
+
+        <div class="stat-decoration">
+            <i class="fa-solid fa-arrow-up-right"></i>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Main Grid -->
+
+<div class="profile-grid">
+
+    <!-- Left Column -->
+
+    <div class="profile-column">
+
+        <!-- Personal Information -->
+
+        <section
+            class="profile-card profile-reveal"
+            data-tilt
+        >
+
+            <div class="card-heading">
+
+                <div class="heading-icon purple">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
+
+                <div class="heading-content">
+
+                    <h2>Personal Information</h2>
+
+                    <p>
+                        Your basic profile details
+                    </p>
+
+                </div>
+
+                <span class="card-status">
+
+                    <i class="fa-solid fa-circle"></i>
+                    Active
+
+                </span>
+
+            </div>
+
+            <div class="info-grid">
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Username
+                        </span>
+
+                        <span class="info-value">
+                            {{ current_user.username }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Email
+                        </span>
+
+                        <span class="info-value">
+                            {{ current_user.email }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-cake-candles"></i>
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Date of Birth
+                        </span>
+
+                        <span class="info-value">
+
+                            {% if current_user.date_of_birth %}
+                                {{ current_user.date_of_birth.strftime('%d %b %Y') }}
+                            {% else %}
+                                Not added
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Academic Domain
+                        </span>
+
+                        <span class="info-value">
+                            {{ current_user.academic_domain or 'Not added' }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Specialization
+                        </span>
+
+                        <span class="info-value">
+                            {{ current_user.specialization or 'Not added' }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-regular fa-calendar"></i>
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Joined
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ current_user.joined_date.strftime('%d %b %Y')
+                               if current_user.joined_date
+                               else 'Recently' }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Skills -->
+
+        <section
+            class="profile-card profile-reveal"
+            data-tilt
+        >
+
+            <div class="card-heading">
+
+                <div class="heading-icon cyan">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </div>
+
+                <div class="heading-content">
+
+                    <h2>Skills</h2>
+
+                    <p>
+                        Your current self-assessed skill levels
+                    </p>
+
+                </div>
+
+                <span class="card-count">
+                    {{ skills|length if skills else 0 }}
+                </span>
+
+            </div>
+
+            {% if skills %}
+
+            <div class="skill-list">
+
+                {% for skill, level in skills.items() %}
+
+                <div class="skill-row">
+
+                    <div class="skill-top">
+
+                        <div class="skill-title">
+
+                            <span class="skill-bullet"></span>
+
+                            <span class="skill-name">
+                                {{ skill.replace('_', ' ')|title }}
+                            </span>
+
+                        </div>
+
+                        <span class="skill-score">
+                            {{ level }}/5
+                        </span>
+
+                    </div>
+
+                    <div class="skill-track">
+
+                        <div
+                            class="skill-progress"
+                            data-width="{{ (level|float / 5 * 100)|round(0) }}"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </div>
+
+                <strong>
+                    No skills added yet
+                </strong>
+
+                <span>
+                    Add your skills to improve career recommendations.
+                </span>
+
+                <a
+                    href="{{ url_for('edit_profile') }}"
+                    class="empty-action"
+                >
+                    Add Skills
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+        <!-- Activities & Interests -->
+
+        <section
+            class="profile-card profile-reveal"
+            data-tilt
+        >
+
+            <div class="card-heading">
+
+                <div class="heading-icon orange">
+                    <i class="fa-solid fa-puzzle-piece"></i>
+                </div>
+
+                <div class="heading-content">
+
+                    <h2>Activities & Interests</h2>
+
+                    <p>
+                        Information that helps personalize your path
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="info-grid">
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Sports
+                        </span>
+
+                        <span class="info-value">
+                            {{ current_user.sports_achievements or 'Not added' }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Extracurricular
+                        </span>
+
+                        <span class="info-value">
+                            {{ current_user.extracurricular or 'Not added' }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="info-item info-item-wide">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+
+                    <div>
+
+                        <span class="info-label">
+                            Hobbies
+                        </span>
+
+                        <span class="info-value">
+                            {{ current_user.hobbies or 'Not added' }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Coding Activity -->
+
+        <section
+            class="profile-card profile-reveal"
+            data-tilt
+        >
+
+            <div class="card-heading">
+
+                <div class="heading-icon orange">
+                    <i class="fa-solid fa-terminal"></i>
+                </div>
+
+                <div class="heading-content">
+
+                    <h2>Coding Activity</h2>
+
+                    <p>
+                        Your recent coding practice
+                    </p>
+
+                </div>
+
+                <a
+                    href="{{ url_for('coding_practice') }}"
+                    class="card-link"
+                >
+                    Practice
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+            </div>
+
+            {% if submissions %}
+
+            <div class="activity-list">
+
+                {% for submission in submissions[:6] %}
+
+                <div class="activity-item">
+
+                    <div
+                        class="activity-icon
+                        {% if submission.status == 'Passed' %}
+                            activity-success
+                        {% else %}
+                            activity-neutral
+                        {% endif %}"
+                    >
+
+                        {% if submission.status == 'Passed' %}
+
+                            <i class="fa-solid fa-check"></i>
+
+                        {% else %}
+
+                            <i class="fa-solid fa-code"></i>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="activity-content">
+
+                        <strong>
+                            {{ submission.problem_id }}
+                        </strong>
+
+                        <span>
+
+                            <b>
+                                {{ submission.language|upper }}
+                            </b>
+
+                            <i></i>
+
+                            {{ submission.status }}
+
+                            <i></i>
+
+                            {{ submission.submitted_date.strftime('%d %b %Y')
+                               if submission.submitted_date
+                               else 'Recently' }}
+
+                        </span>
+
+                    </div>
+
+                    {% if submission.status == 'Passed' %}
+
+                    <span class="activity-badge success">
+                        Passed
+                    </span>
+
+                    {% else %}
+
+                    <span class="activity-badge">
+                        {{ submission.status }}
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+
+                <strong>
+                    No coding activity yet
+                </strong>
+
+                <span>
+                    Start solving challenges to build your profile.
+                </span>
+
+                <a
+                    href="{{ url_for('coding_practice') }}"
+                    class="empty-action"
+                >
+                    Start Coding
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+    </div>
+
+    <!-- Right Column -->
+
+    <div class="profile-column">
+
+        <!-- Aptitude Performance -->
+
+        <section
+            class="profile-card profile-reveal"
+            data-tilt
+        >
+
+            <div class="card-heading">
+
+                <div class="heading-icon green">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+
+                <div class="heading-content">
+
+                    <h2>Aptitude Performance</h2>
+
+                    <p>
+                        Your latest test results
+                    </p>
+
+                </div>
+
+                <a
+                    href="{{ url_for('aptitude_test') }}"
+                    class="card-link"
+                >
+                    Tests
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+            </div>
+
+            {% if aptitude_results %}
+
+            <div class="aptitude-list">
+
+                {% for result in aptitude_results[:6] %}
+
+                    {% set percentage = result.get_percentage()|round(0) %}
+
+                    <div class="aptitude-item">
+
+                        <div class="aptitude-top">
+
+                            <div class="aptitude-name-wrap">
+
+                                <span class="aptitude-icon">
+                                    <i class="fa-solid fa-brain"></i>
+                                </span>
+
+                                <span class="aptitude-name">
+                                    {{ result.test_type }}
+                                </span>
+
+                            </div>
+
+                            <span class="aptitude-score">
+                                {{ percentage }}%
+                            </span>
+
+                        </div>
+
+                        <div class="aptitude-track">
+
+                            <div
+                                class="aptitude-fill"
+                                data-width="{{ percentage }}"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+
+                <strong>
+                    No aptitude tests completed
+                </strong>
+
+                <span>
+                    Take your first test to understand your strengths.
+                </span>
+
+                <a
+                    href="{{ url_for('aptitude_test') }}"
+                    class="empty-action"
+                >
+                    Take Test
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+        <!-- Saved Courses -->
+
+        <section
+            class="profile-card profile-reveal"
+            data-tilt
+        >
+
+            <div class="card-heading">
+
+                <div class="heading-icon cyan">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+
+                <div class="heading-content">
+
+                    <h2>Saved Courses</h2>
+
+                    <p>
+                        Courses you've bookmarked
+                    </p>
+
+                </div>
+
+                <a
+                    href="{{ url_for('courses') }}"
+                    class="card-link"
+                >
+                    Explore
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+            </div>
+
+            {% if saved_courses %}
+
+            <div class="saved-course-list">
+
+                {% for course in saved_courses[:5] %}
+
+                <div class="saved-course">
+
+                    <div class="course-icon">
+                        <i class="fa-solid fa-book"></i>
+                    </div>
+
+                    <div class="course-content">
+
+                        <h3>
+                            {{ course.title }}
+                        </h3>
+
+                        {% if course.description %}
+
+                        <p>
+                            {{ course.description|truncate(90) }}
+                        </p>
+
+                        {% endif %}
+
+                        {% if course.domain %}
+
+                        <span class="course-tag">
+                            {{ course.domain }}
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-right course-arrow"></i>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+
+                <strong>
+                    No saved courses
+                </strong>
+
+                <span>
+                    Explore the course catalog and save useful courses.
+                </span>
+
+                <a
+                    href="{{ url_for('courses') }}"
+                    class="empty-action"
+                >
+                    Explore Courses
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+        <!-- Quick Actions -->
+
+        <section
+            class="profile-card profile-reveal quick-growth-card"
+            data-tilt
+        >
+
+            <div class="card-heading">
+
+                <div class="heading-icon purple">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+
+                <div class="heading-content">
+
+                    <h2>Continue Growing</h2>
+
+                    <p>
+                        Jump back into your career journey
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="quick-actions">
+
+                <a
+                    href="{{ url_for('career_path') }}"
+                    class="quick-action"
+                >
+
+                    <span class="quick-action-icon purple">
+                        <i class="fa-solid fa-route"></i>
+                    </span>
+
+                    <span>
+
+                        <strong>Career Paths</strong>
+
+                        <small>
+                            Explore your direction
+                        </small>
+
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+                <a
+                    href="{{ url_for('ai_advisor') }}"
+                    class="quick-action"
+                >
+
+                    <span class="quick-action-icon cyan">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </span>
+
+                    <span>
+
+                        <strong>AI Advisor</strong>
+
+                        <small>
+                            Get personalized guidance
+                        </small>
+
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+                <a
+                    href="{{ url_for('coding_practice') }}"
+                    class="quick-action"
+                >
+
+                    <span class="quick-action-icon orange">
+                        <i class="fa-solid fa-terminal"></i>
+                    </span>
+
+                    <span>
+
+                        <strong>Coding Practice</strong>
+
+                        <small>
+                            Improve your coding
+                        </small>
+
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+                <a
+                    href="{{ url_for('aptitude_test') }}"
+                    class="quick-action"
+                >
+
+                    <span class="quick-action-icon green">
+                        <i class="fa-solid fa-brain"></i>
+                    </span>
+
+                    <span>
+
+                        <strong>Aptitude Tests</strong>
+
+                        <small>
+                            Measure your progress
+                        </small>
+
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+</div>
+
+<!-- Profile Toast -->
+
+<div
+    class="profile-toast"
+    id="profileToast"
+    role="status"
+    aria-live="polite"
+>
+
+
+<span class="toast-icon">
+    <i class="fa-solid fa-check"></i>
+</span>
+
+<span>
+    Profile information loaded
+</span>
+
+
+</div>
+
+<script src="{{ url_for('static', filename='js/profile.js') }}" defer></script>
+
+{% endblock %}

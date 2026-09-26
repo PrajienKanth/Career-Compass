@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Career Compass{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/auth.css', v='2') }}">
+
+{% endblock %}
+
+{% block page_content %}
+
+<div class="cc-auth login-mode"
+     data-auth-page="login">
+
+
+<!-- Background -->
+
+<div class="cc-auth-orb cc-auth-orb-1"></div>
+
+<div class="cc-auth-orb cc-auth-orb-2"></div>
+
+<div class="cc-auth-orb cc-auth-orb-3"></div>
+
+<div class="cc-auth-particles">
+
+    <span class="cc-auth-particle"></span>
+    <span class="cc-auth-particle"></span>
+    <span class="cc-auth-particle"></span>
+    <span class="cc-auth-particle"></span>
+    <span class="cc-auth-particle"></span>
+    <span class="cc-auth-particle"></span>
+    <span class="cc-auth-particle"></span>
+
+</div>
+
+<!-- Auth Stage -->
+
+<div class="cc-auth-stage login-mode">
+
+    <!-- Left Intro -->
+
+    <section class="cc-auth-intro">
+
+        <a href="{{ url_for('index') }}"
+           class="cc-auth-brand">
+
+            <span class="cc-auth-brand-icon">
+
+                <i class="fa-solid fa-compass"></i>
+
+            </span>
+
+            <span class="cc-auth-brand-name">
+                Career Compass
+            </span>
+
+        </a>
+
+        <h1>
+
+            Your career.
+
+            <br>
+
+            <span>
+                Your direction.
+            </span>
+
+        </h1>
+
+        <p>
+
+            Continue your journey with Career Compass.
+            Explore career paths, build your skills,
+            practice coding, and keep track of your progress.
+
+        </p>
+
+        <div class="cc-auth-features">
+
+            <div class="cc-auth-feature">
+
+                <span class="cc-auth-feature-icon">
+
+                    <i class="fa-solid fa-route"></i>
+
+                </span>
+
+                <span>
+                    Explore career paths
+                </span>
+
+            </div>
+
+            <div class="cc-auth-feature">
+
+                <span class="cc-auth-feature-icon">
+
+                    <i class="fa-solid fa-code"></i>
+
+                </span>
+
+                <span>
+                    Practice and improve your skills
+                </span>
+
+            </div>
+
+            <div class="cc-auth-feature">
+
+                <span class="cc-auth-feature-icon">
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                </span>
+
+                <span>
+                    Track your learning progress
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Login Card -->
+
+    <section class="cc-auth-card">
+
+        <div class="cc-auth-kicker">
+
+            <span class="cc-auth-kicker-dot"></span>
+
+            Welcome back
+
+        </div>
+
+        <h2>
+            Sign in
+        </h2>
+
+        <p class="cc-auth-card-subtitle">
+
+            Enter your credentials to continue your journey.
+
+        </p>
+
+        <!-- Login Form -->
+
+        <form method="POST"
+              action="{{ url_for('login') }}"
+              class="cc-auth-form">
+
+            {{ form.hidden_tag() }}
+
+            <!-- Email -->
+
+            <div class="cc-auth-field">
+
+                <label class="cc-auth-label"
+                       for="{{ form.email.id }}">
+
+                    Email address
+
+                </label>
+
+                <div class="cc-auth-input-wrap">
+
+                    <i class="fa-regular fa-envelope cc-auth-input-icon"></i>
+
+                    {{ form.email(
+                        class="cc-auth-input" ~
+                        (" is-invalid" if form.email.errors else ""),
+                        placeholder="you@example.com",
+                        autocomplete="email",
+                        id=form.email.id
+                    ) }}
+
+                </div>
+
+                {% for error in form.email.errors %}
+
+                    <div class="cc-auth-error">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                        {{ error }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+            <!-- Password -->
+
+            <div class="cc-auth-field">
+
+                <label class="cc-auth-label"
+                       for="{{ form.password.id }}">
+
+                    Password
+
+                </label>
+
+                <div class="cc-auth-input-wrap">
+
+                    <i class="fa-solid fa-lock cc-auth-input-icon"></i>
+
+                    {{ form.password(
+                        class="cc-auth-input password-input" ~
+                        (" is-invalid" if form.password.errors else ""),
+                        placeholder="Enter your password",
+                        autocomplete="current-password",
+                        id=form.password.id
+                    ) }}
+
+                    <button type="button"
+                            class="cc-auth-password-toggle"
+                            data-target="{{ form.password.id }}"
+                            aria-label="Show password"
+                            aria-pressed="false">
+
+                        <i class="fa-regular fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+                {% for error in form.password.errors %}
+
+                    <div class="cc-auth-error">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                        {{ error }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+            <!-- Submit -->
+
+            <button type="submit"
+                    class="cc-auth-submit"
+                    data-loading-text="Signing in...">
+
+                <span class="cc-auth-submit-content">
+
+                    <span class="submit-text">
+                        Sign in
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right submit-arrow"></i>
+
+                    <span class="cc-auth-spinner"></span>
+
+                </span>
+
+            </button>
+
+        </form>
+
+        <!-- Register Switch -->
+
+        <div class="cc-auth-switch">
+
+            Don't have an account?
+
+            <a href="{{ url_for('register') }}"
+               class="cc-auth-switch-link"
+               data-auth-target="register">
+
+                Create one
+
+            </a>
+
+        </div>
+
+        <!-- Security -->
+
+        <div class="cc-auth-security">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <span>
+                Your account information is securely protected
+            </span>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{{ url_for('static', filename='js/auth.js', v='2') }}"></script>
+
+{% endblock %}

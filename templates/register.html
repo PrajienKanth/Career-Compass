@@ -1,0 +1,534 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Create Account | Career Compass
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/auth.css', v='4') }}">
+
+{% endblock %}
+
+{% block page_content %}
+
+<div
+    class="cc-auth register-mode"
+    data-auth-page="register">
+
+    <!-- Background -->
+
+    <div class="cc-auth-background">
+
+        <div class="cc-auth-orb cc-auth-orb-1"></div>
+
+        <div class="cc-auth-orb cc-auth-orb-2"></div>
+
+        <div class="cc-auth-orb cc-auth-orb-3"></div>
+
+        <div class="cc-auth-particles">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+    </div>
+
+    <!-- Auth Stage -->
+
+    <div class="cc-auth-stage register-mode">
+
+        <!-- Register Form -->
+
+        <section class="cc-auth-card">
+
+            <div class="cc-auth-card-header">
+
+                <span class="cc-auth-kicker">
+                    <span></span>
+                    CREATE YOUR ACCOUNT
+                </span>
+
+                <h2>
+                    Start your journey
+                </h2>
+
+                <p class="cc-auth-card-subtitle">
+                    Create your Career Compass account
+                    and build your career path.
+                </p>
+
+            </div>
+
+            <!-- Register Form -->
+
+            <form
+                method="POST"
+                action="{{ url_for('register') }}"
+                class="cc-auth-form cc-register-form"
+                novalidate>
+
+                {{ form.hidden_tag() }}
+
+                <!-- Username -->
+
+                <div class="cc-auth-form-group">
+
+                    <label
+                        class="cc-auth-label"
+                        for="{{ form.username.id }}">
+
+                        Username
+
+                    </label>
+
+                    <div class="cc-auth-input-wrap">
+
+                        <i
+                            class="fa-regular fa-user cc-auth-input-icon">
+                        </i>
+
+                        {{ form.username(
+                            class="cc-auth-input",
+                            id=form.username.id,
+                            placeholder="Choose a username",
+                            autocomplete="username"
+                        ) }}
+
+                    </div>
+
+                    {% for error in form.username.errors %}
+
+                        <div class="cc-auth-field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            <span>
+                                {{ error }}
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- Email -->
+
+                <div class="cc-auth-form-group">
+
+                    <label
+                        class="cc-auth-label"
+                        for="{{ form.email.id }}">
+
+                        Email address
+
+                    </label>
+
+                    <div class="cc-auth-input-wrap">
+
+                        <i
+                            class="fa-regular fa-envelope cc-auth-input-icon">
+                        </i>
+
+                        {{ form.email(
+                            class="cc-auth-input",
+                            id=form.email.id,
+                            placeholder="Enter your email",
+                            autocomplete="email"
+                        ) }}
+
+                    </div>
+
+                    {% for error in form.email.errors %}
+
+                        <div class="cc-auth-field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            <span>
+                                {{ error }}
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- New Password -->
+
+                <div class="cc-auth-form-group">
+
+                    <label
+                        class="cc-auth-label"
+                        for="{{ form.password.id }}">
+
+                        New password
+
+                    </label>
+
+                    <div class="cc-auth-input-wrap">
+
+                        <i
+                            class="fa-solid fa-lock cc-auth-input-icon">
+                        </i>
+
+                        {{ form.password(
+                            class="cc-auth-input",
+                            id=form.password.id,
+                            placeholder="Create a strong password",
+                            autocomplete="new-password"
+                        ) }}
+
+                        <button
+                            type="button"
+                            class="cc-auth-password-toggle"
+                            data-target="{{ form.password.id }}"
+                            aria-label="Show password">
+
+                            <i class="fa-regular fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                    <!-- Password Strength -->
+
+                    <div class="cc-password-strength strength-empty">
+
+                        <div class="cc-password-strength-header">
+
+                            <span class="cc-password-strength-label">
+                                Password strength
+                            </span>
+
+                            <span class="cc-password-strength-status">
+                                Secure your account
+                            </span>
+
+                        </div>
+
+                        <div class="cc-password-strength-track">
+
+                            <div
+                                class="cc-password-strength-bar">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Password Requirements -->
+
+                    <div class="cc-password-requirements">
+
+                        <div class="cc-password-requirements-title">
+
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                            <span>
+                                Your password should contain
+                            </span>
+
+                        </div>
+
+                        <div class="cc-password-requirements-grid">
+
+                            <div
+                                class="cc-password-requirement"
+                                data-requirement="length">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                                <span>
+                                    8+ characters
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="cc-password-requirement"
+                                data-requirement="lowercase">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                                <span>
+                                    Lowercase letter
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="cc-password-requirement"
+                                data-requirement="uppercase">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                                <span>
+                                    Uppercase letter
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="cc-password-requirement"
+                                data-requirement="number">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                                <span>
+                                    Number
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="cc-password-requirement"
+                                data-requirement="special">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                                <span>
+                                    Special character
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% for error in form.password.errors %}
+
+                        <div class="cc-auth-field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            <span>
+                                {{ error }}
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- Confirm Password -->
+
+                <div class="cc-auth-form-group">
+
+                    <label
+                        class="cc-auth-label"
+                        for="{{ form.confirm_password.id }}">
+
+                        Confirm password
+
+                    </label>
+
+                    <div class="cc-auth-input-wrap">
+
+                        <i
+                            class="fa-solid fa-shield-halved cc-auth-input-icon">
+                        </i>
+
+                        {{ form.confirm_password(
+                            class="cc-auth-input",
+                            id=form.confirm_password.id,
+                            placeholder="Re-enter your password",
+                            autocomplete="new-password"
+                        ) }}
+
+                        <button
+                            type="button"
+                            class="cc-auth-password-toggle"
+                            data-target="{{ form.confirm_password.id }}"
+                            aria-label="Show password">
+
+                            <i class="fa-regular fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                    <!-- Password Match -->
+
+                    <div class="cc-password-match">
+
+                    </div>
+
+                    {% for error in form.confirm_password.errors %}
+
+                        <div class="cc-auth-field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            <span>
+                                {{ error }}
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- Submit -->
+
+                <button
+                    type="submit"
+                    class="cc-auth-submit cc-auth-register-submit"
+                    data-loading-text="Creating account..."
+                    disabled>
+
+                    <span class="cc-auth-submit-text">
+                        Create Account
+                    </span>
+
+                    <span class="cc-auth-submit-spinner d-none">
+
+                        <span class="spinner-border"
+                              role="status"
+                              aria-hidden="true">
+                        </span>
+
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right cc-submit-arrow"></i>
+
+                </button>
+
+            </form>
+
+            <!-- Switch Login -->
+
+            <div class="cc-auth-switch">
+
+                Already have an account?
+
+                <a
+                    href="{{ url_for('login') }}"
+                    class="cc-auth-switch-link"
+                    data-auth-target="login">
+
+                    Sign in
+
+                </a>
+
+            </div>
+
+            <!-- Security -->
+
+            <div class="cc-auth-security">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <span>
+                    Your account credentials are securely protected.
+                </span>
+
+            </div>
+
+        </section>
+
+        <!-- Intro Panel -->
+
+        <section class="cc-auth-intro">
+
+            <div class="cc-auth-brand-mark">
+
+                <i class="fa-solid fa-compass"></i>
+
+            </div>
+
+            <h1>
+
+                <span class="gradient-text">
+                    Build your
+                </span>
+
+                future with
+                <span class="gradient-text">
+                    clarity.
+                </span>
+
+            </h1>
+
+            <p>
+
+                Career Compass brings your learning,
+                skills, career exploration and practice
+                into one focused platform.
+
+            </p>
+
+            <div class="cc-auth-features">
+
+                <div class="cc-auth-feature">
+
+                    <span class="cc-auth-feature-icon">
+
+                        <i class="fa-solid fa-route"></i>
+
+                    </span>
+
+                    <span>
+                        Explore personalized career paths
+                    </span>
+
+                </div>
+
+                <div class="cc-auth-feature">
+
+                    <span class="cc-auth-feature-icon">
+
+                        <i class="fa-solid fa-brain"></i>
+
+                    </span>
+
+                    <span>
+                        Learn with AI-powered guidance
+                    </span>
+
+                </div>
+
+                <div class="cc-auth-feature">
+
+                    <span class="cc-auth-feature-icon">
+
+                        <i class="fa-solid fa-code"></i>
+
+                    </span>
+
+                    <span>
+                        Practice skills and track progress
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script
+    src="{{ url_for('static', filename='js/auth.js', v='4') }}">
+</script>
+
+{% endblock %}
+

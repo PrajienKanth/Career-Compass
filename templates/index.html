@@ -1,0 +1,2404 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Career Compass{% endblock %}
+
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <!--    AMBIENT BACKGROUND -->
+
+    <div class="dashboard-ambient" aria-hidden="true">
+
+        <span class="ambient-orb ambient-orb-one"></span>
+
+        <span class="ambient-orb ambient-orb-two"></span>
+
+        <span class="ambient-orb ambient-orb-three"></span>
+
+        <div class="ambient-grid"></div>
+
+        <div class="ambient-noise"></div>
+
+    </div>
+
+
+    <!--    SCROLL PROGRESS -->
+
+    <div class="dashboard-scroll-progress" aria-hidden="true">
+
+        <span id="dashboardScrollProgress"></span>
+
+    </div>
+
+
+
+    <div class="dashboard-content">
+
+
+        <!-- HERO -->
+
+        <section class="dashboard-hero reveal reveal-hero">
+
+            <div class="hero-cursor-glow"></div>
+
+
+            <div class="hero-content">
+
+                <div class="hero-badge">
+
+                    <span class="hero-live-dot"></span>
+
+                    <span>
+                        Personal Career Workspace
+                    </span>
+
+                    <span class="hero-badge-sparkle">
+                        ✦
+                    </span>
+
+                </div>
+
+
+                <h1 class="hero-title">
+
+                    Welcome back,
+                    <span class="hero-name">
+                        {{ current_user.username }}
+                    </span>
+
+                    <span class="hero-wave">
+                        👋
+                    </span>
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    Your career journey is already in motion.
+                    Keep learning, building skills, and moving
+                    closer to your goals.
+
+                </p>
+
+
+                <div class="hero-actions">
+
+                    <a href="{{ url_for('career_path') }}" class="premium-button premium-button-primary">
+
+                        <span class="button-icon">
+                            <i class="fa-solid fa-route"></i>
+                        </span>
+
+                        <span>
+                            Explore Careers
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right button-arrow"></i>
+
+                    </a>
+
+
+                    <a href="{{ url_for('ai_advisor') }}" class="premium-button premium-button-secondary">
+
+                        <span class="button-icon">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </span>
+
+                        <span>
+                            Ask AI Advisor
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <div class="hero-meta">
+
+                    <div class="hero-meta-item">
+
+                        <span class="hero-meta-icon">
+                            <i class="fa-solid fa-compass"></i>
+                        </span>
+
+                        <span>
+                            Career Explorer
+                        </span>
+
+                    </div>
+
+
+                    <div class="hero-meta-divider"></div>
+
+
+                    <div class="hero-meta-item">
+
+                        <span class="hero-meta-icon">
+                            <i class="fa-solid fa-bolt"></i>
+                        </span>
+
+                        <span>
+                            Keep growing
+                        </span>
+
+                    </div>
+
+
+                    <div class="hero-meta-divider"></div>
+
+
+                    <div class="hero-meta-item">
+
+                        <span class="hero-meta-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </span>
+
+                        <span>
+                            Personal workspace
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HERO VISUAL -->
+
+            <div class="hero-visual profile-hero-visual">
+
+                <div class="profile-orbit profile-orbit-one"></div>
+                <div class="profile-orbit profile-orbit-two"></div>
+
+                <div class="profile-glow profile-glow-purple"></div>
+                <div class="profile-glow profile-glow-cyan"></div>
+
+                <div class="profile-image-container">
+
+                    <div class="profile-image-ring"></div>
+
+                    <div class="profile-image-frame">
+
+                        {% if current_user.profile_photo %}
+
+                        <img src="{{ url_for('static', filename='uploads/' ~ current_user.profile_photo) }}"
+                            alt="{{ current_user.username }} profile photo" class="dashboard-profile-image"
+                            loading="eager"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+
+                        <div class="dashboard-profile-fallback" style="display:none;">
+                            {{ current_user.username[:1] | upper }}
+                        </div>
+
+                        {% else %}
+
+                        <div class="dashboard-profile-fallback">
+                            {{ current_user.username[:1] | upper }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    <span class="profile-status">
+                        <span></span>
+                        PROFILE
+                    </span>
+
+                </div>
+
+
+                <div class="profile-floating-card profile-card-top">
+
+                    <span class="profile-floating-icon">
+                        <i class="fa-solid fa-user-check"></i>
+                    </span>
+
+                    <div>
+                        <strong>Career Profile</strong>
+                        <span>Ready to grow</span>
+                    </div>
+
+                </div>
+
+
+                <div class="profile-floating-card profile-card-bottom">
+
+                    <span class="profile-floating-icon">
+                        <i class="fa-solid fa-compass"></i>
+                    </span>
+
+                    <div>
+                        <strong>Career Compass</strong>
+                        <span>Your journey</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        ```html
+        <!-- OVERVIEW -->
+
+        <section class="dashboard-section career-overview-section">
+
+            <div class="section-heading reveal">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        YOUR PROGRESS
+                    </span>
+
+                    <h2>
+                        Career Overview
+                    </h2>
+
+                    <p>
+                        A quick look at your learning activity.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-stats career-overview-grid">
+
+
+                <!-- SAVED COURSES -->
+
+                <article class="dashboard-stat interactive-card overview-card career-overview-card reveal"
+                    data-delay="0" tabindex="0">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon stat-icon-purple">
+
+                            <i class="fa-solid fa-book-open"></i>
+
+                        </div>
+
+                        <span class="stat-mini-label">
+                            LEARNING
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-value-row">
+
+                        <h3 class="stat-value" data-count="{{ saved_courses|length }}">
+                            0
+                        </h3>
+
+                        <span class="stat-symbol">
+                            +
+                        </span>
+
+                    </div>
+
+
+                    <p class="stat-title">
+                        Saved Courses
+                    </p>
+
+
+                    <span class="stat-description">
+                        Courses saved for later learning.
+                    </span>
+
+
+                    <div class="stat-decoration"></div>
+
+
+                    <!-- HOVER PREVIEW -->
+
+                    <div class="overview-hover-preview">
+
+                        <div class="overview-preview-header">
+
+                            <div>
+                                <span class="overview-preview-kicker">
+                                    RECENT SAVES
+                                </span>
+
+                                <strong>
+                                    Your learning list
+                                </strong>
+                            </div>
+
+                            <span class="overview-preview-header-icon purple">
+                                <i class="fa-solid fa-bookmark"></i>
+                            </span>
+
+                        </div>
+
+
+                        {% if saved_courses %}
+
+                        <div class="overview-preview-list">
+
+                            {% for saved in saved_courses[:3] %}
+
+                            <div class="overview-preview-item">
+
+                                <span class="overview-preview-item-icon purple">
+                                    <i class="fa-solid fa-book-open"></i>
+                                </span>
+
+                                <div class="overview-preview-item-content">
+
+                                    <strong>
+                                        {{ saved.course.title }}
+                                    </strong>
+
+                                    <span>
+                                        Saved course
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="overview-preview-empty">
+
+                            <span>
+                                <i class="fa-solid fa-book-open"></i>
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    No saved courses
+                                </strong>
+
+                                <small>
+                                    Explore courses to start building your list.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <div class="overview-preview-footer">
+
+                            <span>
+                                {{ saved_courses|length }} saved
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- CODING SUBMISSIONS -->
+
+                <article class="dashboard-stat interactive-card overview-card career-overview-card reveal"
+                    data-delay="80" tabindex="0">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon stat-icon-cyan">
+
+                            <i class="fa-solid fa-code"></i>
+
+                        </div>
+
+                        <span class="stat-mini-label">
+                            PRACTICE
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-value-row">
+
+                        <h3 class="stat-value" data-count="{{ submissions|length }}">
+                            0
+                        </h3>
+
+                        <span class="stat-symbol">
+                            +
+                        </span>
+
+                    </div>
+
+
+                    <p class="stat-title">
+                        Coding Submissions
+                    </p>
+
+
+                    <span class="stat-description">
+                        Problems attempted in coding practice.
+                    </span>
+
+
+                    <div class="stat-decoration"></div>
+
+
+                    <!-- HOVER PREVIEW -->
+
+                    <div class="overview-hover-preview">
+
+                        <div class="overview-preview-header">
+
+                            <div>
+
+                                <span class="overview-preview-kicker">
+                                    RECENT PRACTICE
+                                </span>
+
+                                <strong>
+                                    Coding activity
+                                </strong>
+
+                            </div>
+
+                            <span class="overview-preview-header-icon cyan">
+                                <i class="fa-solid fa-terminal"></i>
+                            </span>
+
+                        </div>
+
+
+                        {% if submissions %}
+
+                        <div class="overview-preview-list">
+
+                            {% for submission in submissions[:3] %}
+
+                            <div class="overview-preview-item">
+
+                                <span class="overview-preview-item-icon cyan">
+                                    <i class="fa-solid fa-code"></i>
+                                </span>
+
+                                <div class="overview-preview-item-content">
+
+                                    <strong>
+                                        {{ submission.problem.title }}
+                                    </strong>
+
+                                    <span>
+
+                                        {% if submission.status %}
+                                        {{ submission.status }}
+                                        {% else %}
+                                        Submission
+                                        {% endif %}
+
+                                    </span>
+
+                                </div>
+
+
+                                <span class="overview-preview-status
+                                    {% if submission.status and submission.status|lower == 'accepted' %}
+                                        accepted
+                                    {% endif %}">
+
+                                    {% if submission.status and submission.status|lower == 'accepted' %}
+
+                                    <i class="fa-solid fa-circle-check"></i>
+
+                                    {% else %}
+
+                                    <i class="fa-solid fa-code"></i>
+
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="overview-preview-empty">
+
+                            <span>
+                                <i class="fa-solid fa-terminal"></i>
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    No coding activity
+                                </strong>
+
+                                <small>
+                                    Start solving problems to build your practice history.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <div class="overview-preview-footer">
+
+                            <span>
+                                {{ submissions|length }} submissions
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- APTITUDE -->
+
+                <article class="dashboard-stat interactive-card overview-card career-overview-card reveal"
+                    data-delay="160" tabindex="0">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon stat-icon-green">
+
+                            <i class="fa-solid fa-brain"></i>
+
+                        </div>
+
+                        <span class="stat-mini-label">
+                            APTITUDE
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-value-row">
+
+                        <h3 class="stat-value" data-count="{{ aptitude_results|length }}">
+                            0
+                        </h3>
+
+                        <span class="stat-symbol">
+                            +
+                        </span>
+
+                    </div>
+
+
+                    <p class="stat-title">
+                        Tests Completed
+                    </p>
+
+
+                    <span class="stat-description">
+                        Aptitude assessments completed.
+                    </span>
+
+
+                    <div class="stat-decoration"></div>
+
+
+                    <!-- HOVER PREVIEW -->
+
+                    <div class="overview-hover-preview">
+
+                        <div class="overview-preview-header">
+
+                            <div>
+
+                                <span class="overview-preview-kicker">
+                                    PERFORMANCE
+                                </span>
+
+                                <strong>
+                                    Recent assessments
+                                </strong>
+
+                            </div>
+
+                            <span class="overview-preview-header-icon green">
+                                <i class="fa-solid fa-brain"></i>
+                            </span>
+
+                        </div>
+
+
+                        {% if aptitude_results %}
+
+                        <div class="overview-preview-list">
+
+                            {% for result in aptitude_results[:3] %}
+
+                            <div class="overview-preview-item">
+
+                                <span class="overview-preview-item-icon green">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </span>
+
+                                <div class="overview-preview-item-content">
+
+                                    <strong>
+                                        {{ result.test_name }}
+                                    </strong>
+
+                                    <span>
+                                        {{ result.get_percentage() }}% score
+                                    </span>
+
+                                </div>
+
+
+                                <span class="overview-score green">
+                                    {{ result.get_percentage() }}%
+                                </span>
+
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="overview-preview-empty">
+
+                            <span>
+                                <i class="fa-solid fa-brain"></i>
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    No tests completed
+                                </strong>
+
+                                <small>
+                                    Take an aptitude test to start tracking your performance.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <div class="overview-preview-footer">
+
+                            <span>
+                                {{ aptitude_results|length }} tests completed
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- PROFILE -->
+
+                <article class="dashboard-stat interactive-card overview-card career-overview-card reveal"
+                    data-delay="240" tabindex="0">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon stat-icon-orange">
+
+                            <i class="fa-solid fa-user-check"></i>
+
+                        </div>
+
+                        <span class="stat-mini-label">
+                            PROFILE
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-value-row">
+
+                        <h3 class="stat-value stat-value-text">
+                            READY
+                        </h3>
+
+                    </div>
+
+
+                    <p class="stat-title">
+                        Career Profile
+                    </p>
+
+
+                    <span class="stat-description">
+                        Keep your skills and goals updated.
+                    </span>
+
+
+                    <div class="stat-decoration"></div>
+
+
+                    <!-- HOVER PREVIEW -->
+
+                    <div class="overview-hover-preview profile-preview">
+
+                        <div class="overview-preview-header">
+
+                            <div>
+
+                                <span class="overview-preview-kicker">
+                                    PROFILE STATUS
+                                </span>
+
+                                <strong>
+                                    Your career profile
+                                </strong>
+
+                            </div>
+
+                            <span class="overview-preview-header-icon orange">
+                                <i class="fa-solid fa-user-check"></i>
+                            </span>
+
+                        </div>
+
+
+                        <div class="profile-preview-main">
+
+                            <div class="profile-preview-avatar">
+
+                                {% if current_user.profile_photo %}
+
+                                <img src="{{ url_for('static', filename='uploads/' ~ current_user.profile_photo) }}"
+                                    alt="{{ current_user.username }} profile photo"
+                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+                                <span style="display:none;">
+                                    {{ current_user.username[:1] | upper }}
+                                </span>
+
+                                {% else %}
+
+                                <span>
+                                    {{ current_user.username[:1] | upper }}
+                                </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="profile-preview-identity">
+
+                                <strong>
+                                    {{ current_user.username }}
+                                </strong>
+
+                                <span>
+                                    Career profile active
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="profile-preview-points">
+
+                            <div>
+
+                                <span class="profile-preview-point-icon">
+                                    <i class="fa-solid fa-user-check"></i>
+                                </span>
+
+                                <span>
+                                    Profile available
+                                </span>
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span class="profile-preview-point-icon">
+                                    <i class="fa-solid fa-layer-group"></i>
+                                </span>
+
+                                <span>
+                                    Skills can be updated
+                                </span>
+
+                                <i class="fa-solid fa-arrow-right"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="overview-preview-footer">
+
+                            <span>
+                                Keep your profile updated
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+            </div>
+
+        </section>
+        ```
+
+
+
+        <!-- PICKED FOR YOU -->
+
+        <section class="dashboard-section recommendation-dashboard-section" id="picked-for-you" data-aos="fade-up">
+
+            <div class="dashboard-section-heading">
+
+                <div>
+
+                    <span class="section-kicker">
+                        COLLABORATIVE INTELLIGENCE
+                    </span>
+
+                    <h2>
+                        Picked for you
+                    </h2>
+
+                    <p>
+                        Courses discovered from your learning journey
+                        and patterns across similar learners.
+                    </p>
+
+                </div>
+
+
+                <a href="{{ url_for('recommendations') }}" class="section-action-btn">
+
+                    Explore all
+
+                    <i class="fas fa-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            {% if recommendations %}
+
+            <div class="dashboard-recommendation-grid">
+
+                {% for item in recommendations %}
+
+                {% set course = item.course %}
+
+                <article class="dashboard-recommendation-card" data-course-id="{{ item.course_id }}">
+
+                    <!-- CARD GLOW -->
+
+                    <div class="dashboard-recommendation-glow"></div>
+
+
+                    <!-- TOP -->
+
+                    <div class="dashboard-recommendation-top">
+
+                        <span class="dashboard-recommendation-source">
+
+                            {% if item.source == "collaborative_filtering" %}
+
+                            <i class="fas fa-users"></i>
+
+                            Similar learners
+
+                            {% elif item.source == "profile_relevance" %}
+
+                            <i class="fas fa-user-check"></i>
+
+                            Profile match
+
+                            {% else %}
+
+                            <i class="fas fa-fire"></i>
+
+                            Popular
+
+                            {% endif %}
+
+                        </span>
+
+
+                        <span class="dashboard-recommendation-match">
+
+                            {{ item.score|round|int }}%
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- COURSE ICON -->
+
+                    <div class="dashboard-recommendation-icon">
+
+                        <i class="fas fa-graduation-cap"></i>
+
+                    </div>
+
+
+                    <!-- COURSE CONTENT -->
+
+                    <div class="dashboard-recommendation-content">
+
+                        <span class="dashboard-recommendation-domain">
+
+                            {{ course.domain
+                            |replace("_", " ")
+                            |title }}
+
+                        </span>
+
+
+                        <h3>
+                            {{ course.title }}
+                        </h3>
+
+
+                        <p>
+                            {{ course.description }}
+                        </p>
+
+
+                        <!-- Skills -->
+
+                        <div class="dashboard-recommendation-tags">
+
+                            {% for skill in course.skills[:3] %}
+
+                            <span>
+                                {{ skill
+                                |replace("_", " ")
+                                |title }}
+                            </span>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- Reason -->
+
+                        <div class="dashboard-recommendation-reason">
+
+                            <i class="fas fa-sparkles"></i>
+
+                            <span>
+                                {{ item.reason }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FOOTER -->
+
+                    <div class="dashboard-recommendation-footer">
+
+                        <span>
+
+                            <i class="fas fa-clock"></i>
+
+                            {{ course.duration }}
+
+                        </span>
+
+
+                        <form method="POST" action="{{ url_for(
+                    'save_course',
+                    course_id=course.id
+                ) }}" class="dashboard-recommendation-form">
+
+                            {% if csrf_token is defined %}
+
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                            {% endif %}
+
+
+                            <button type="submit" class="dashboard-recommendation-save"
+                                data-course-id="{{ course.id }}">
+
+                                <i class="far fa-bookmark"></i>
+
+                                Save
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </article>
+
+                {% endfor %}
+
+            </div>
+
+
+            {% else %}
+
+            <!-- EMPTY / COLD START -->
+
+            <div class="dashboard-recommendation-empty">
+
+                <div class="dashboard-recommendation-empty-icon">
+
+                    <i class="fas fa-compass"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        RECOMMENDATION ENGINE
+                    </span>
+
+                    <h3>
+                        Your recommendations are learning your path.
+                    </h3>
+
+                    <p>
+                        Explore and save a few courses. Career Compass
+                        will use your activity and similar learner
+                        patterns to discover relevant courses.
+                    </p>
+
+                </div>
+
+
+                <a href="{{ url_for('courses') }}" class="dashboard-recommendation-explore">
+
+                    Explore courses
+
+                    <i class="fas fa-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+        <!-- JOURNEY + AI -->
+
+        <section class="dashboard-section">
+
+            <div class="dashboard-two-column">
+
+
+                <!-- CAREER JOURNEY -->
+
+                <article class="dashboard-card journey-card reveal reveal-left">
+
+                    <div class="card-header">
+
+                        <div class="card-heading">
+
+                            <span class="card-icon purple">
+
+                                <i class="fa-solid fa-route"></i>
+
+                            </span>
+
+                            <div>
+
+                                <span class="card-eyebrow">
+                                    YOUR PATH
+                                </span>
+
+                                <h3>
+                                    Career Journey
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <button type="button" class="card-action-button" id="openJourneyModal"
+                            aria-label="Open career journey details">
+
+                            <i class="fa-solid fa-expand"></i>
+
+                        </button>
+
+                    </div>
+
+
+
+                    <div class="journey-progress">
+
+                        <div class="journey-progress-heading">
+
+                            <span>
+                                Overall progress
+                            </span>
+
+                            <strong>
+                                {{ progress }}%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="premium-progress">
+
+                            <span class="premium-progress-fill" data-progress="{{ progress }}"></span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="journey-timeline">
+
+
+                        <!-- STEP 1 -->
+
+                        <div class="journey-step completed reveal">
+
+                            <div class="journey-line"></div>
+
+                            <div class="journey-step-icon">
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </div>
+
+                            <div class="journey-step-content">
+
+                                <strong>
+                                    Profile Created
+                                </strong>
+
+                                <span>
+                                    Your Career Compass profile is ready.
+                                </span>
+
+                            </div>
+
+                            <span class="journey-status completed">
+                                Completed
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- STEP 2 -->
+
+                        <div class="journey-step completed reveal">
+
+                            <div class="journey-line"></div>
+
+                            <div class="journey-step-icon">
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </div>
+
+                            <div class="journey-step-content">
+
+                                <strong>
+                                    Career Exploration
+                                </strong>
+
+                                <span>
+                                    Explore career paths that match your interests.
+                                </span>
+
+                            </div>
+
+                            <span class="journey-status completed">
+                                Active
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- STEP 3 -->
+
+                        <div class="journey-step active reveal">
+
+                            <div class="journey-line"></div>
+
+                            <div class="journey-step-icon">
+
+                                <i class="fa-solid fa-chart-line"></i>
+
+                            </div>
+
+                            <div class="journey-step-content">
+
+                                <strong>
+                                    Build Skills
+                                </strong>
+
+                                <span>
+                                    Improve your technical and professional skills.
+                                </span>
+
+                            </div>
+
+                            <span class="journey-status active">
+                                Current
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- STEP 4 -->
+
+                        <div class="journey-step reveal">
+
+                            <div class="journey-step-icon">
+
+                                <i class="fa-solid fa-flag-checkered"></i>
+
+                            </div>
+
+                            <div class="journey-step-content">
+
+                                <strong>
+                                    Career Ready
+                                </strong>
+
+                                <span>
+                                    Prepare for applications and interviews.
+                                </span>
+
+                            </div>
+
+                            <span class="journey-status upcoming">
+                                Upcoming
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </article>
+
+
+
+                <!--        AI ADVISOR
+                     -->
+
+                <article class="dashboard-card ai-dashboard-card reveal reveal-right">
+
+                    <div class="ai-background-ring ring-one"></div>
+
+                    <div class="ai-background-ring ring-two"></div>
+
+
+                    <div class="ai-card-content">
+
+                        <div class="ai-card-top">
+
+                            <div class="ai-icon-large">
+
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                            </div>
+
+                            <span class="ai-status">
+
+                                <span></span>
+
+                                AI READY
+
+                            </span>
+
+                        </div>
+
+
+                        <span class="card-eyebrow">
+                            PERSONALIZED GUIDANCE
+                        </span>
+
+
+                        <h3>
+                            Your AI Career Advisor
+                        </h3>
+
+
+                        <p>
+                            Get personalized guidance for career paths,
+                            skills, learning plans, projects, and interviews.
+                        </p>
+
+
+                        <div class="ai-feature-list">
+
+                            <div>
+                                <i class="fa-solid fa-check"></i>
+                                <span>Career recommendations</span>
+                            </div>
+
+                            <div>
+                                <i class="fa-solid fa-check"></i>
+                                <span>Skill gap guidance</span>
+                            </div>
+
+                            <div>
+                                <i class="fa-solid fa-check"></i>
+                                <span>Learning suggestions</span>
+                            </div>
+
+                        </div>
+
+
+                        <a href="{{ url_for('ai_advisor') }}" class="ai-cta">
+
+                            <span>
+                                Open AI Advisor
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    <div class="ai-card-glow"></div>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SKILLS + APTITUDE -->
+
+        <section class="dashboard-section">
+
+            <div class="dashboard-two-column">
+
+
+                <!--        SKILLS
+                     -->
+
+                <article class="dashboard-card reveal reveal-left">
+
+                    <div class="card-header">
+
+                        <div class="card-heading">
+
+                            <span class="card-icon cyan">
+
+                                <i class="fa-solid fa-layer-group"></i>
+
+                            </span>
+
+                            <div>
+
+                                <span class="card-eyebrow">
+                                    SKILL SNAPSHOT
+                                </span>
+
+                                <h3>
+                                    Your Skills
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <a href="{{ url_for('profile') }}" class="card-link">
+
+                            Manage
+
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    {% set skills = current_user.get_skills() or {} %}
+
+
+                    {% if skills %}
+
+                    <div class="skill-list">
+
+                        {% for skill, value in skills.items() %}
+
+                        <div class="skill-item reveal">
+
+                            <div class="skill-heading">
+
+                                <span>
+                                    {{ skill }}
+                                </span>
+
+                                <strong>
+                                    {{ value }}/5
+                                </strong>
+
+                            </div>
+
+
+                            <div class="skill-progress">
+
+                                <span class="skill-progress-fill"
+                                    data-progress="{{ ((value|float / 5) * 100)|round|int }}">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="empty-state">
+
+                        <div class="empty-state-icon">
+
+                            <i class="fa-solid fa-layer-group"></i>
+
+                        </div>
+
+                        <h4>
+                            No skills added yet
+                        </h4>
+
+                        <p>
+                            Add your skills to personalize your career journey.
+                        </p>
+
+                        <a href="{{ url_for('profile') }}" class="small-premium-button">
+
+                            Update Profile
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+                    {% endif %}
+
+                </article>
+
+
+
+                <!-- APTITUDE -->
+
+                <article class="dashboard-card reveal reveal-right">
+
+                    <div class="card-header">
+
+                        <div class="card-heading">
+
+                            <span class="card-icon green">
+
+                                <i class="fa-solid fa-brain"></i>
+
+                            </span>
+
+                            <div>
+
+                                <span class="card-eyebrow">
+                                    PERFORMANCE
+                                </span>
+
+                                <h3>
+                                    Aptitude Performance
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <a href="{{ url_for('aptitude_test') }}" class="card-link">
+
+                            Practice
+
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    {% if aptitude_results %}
+
+                    <div class="aptitude-list">
+
+                        {% for result in aptitude_results[:5] %}
+
+                        <div class="aptitude-item reveal">
+
+                            <div class="aptitude-icon">
+
+                                <i class="fa-solid fa-bolt"></i>
+
+                            </div>
+
+
+                            <div class="aptitude-main">
+
+                                <div class="aptitude-heading">
+
+                                    <strong>
+                                        {{ result.test_name }}
+                                    </strong>
+
+                                    <span>
+                                        {{ result.get_percentage() }}%
+                                    </span>
+
+                                </div>
+
+
+                                <div class="aptitude-progress">
+
+                                    <span class="aptitude-progress-fill" data-progress="{{ result.get_percentage() }}">
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="empty-state">
+
+                        <div class="empty-state-icon">
+
+                            <i class="fa-solid fa-brain"></i>
+
+                        </div>
+
+                        <h4>
+                            No tests completed
+                        </h4>
+
+                        <p>
+                            Take an aptitude test to track your performance.
+                        </p>
+
+                        <a href="{{ url_for('aptitude_test') }}" class="small-premium-button">
+
+                            Start Test
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+                    {% endif %}
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- QUICK ACTIONS -->
+
+        <section class="dashboard-section">
+
+            <div class="section-heading reveal">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        SHORTCUTS
+                    </span>
+
+                    <h2>
+                        Continue Your Journey
+                    </h2>
+
+                    <p>
+                        Jump directly into the tools you need.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-actions">
+
+
+                <a href="{{ url_for('career_path') }}" class="quick-action interactive-card reveal" data-delay="0">
+
+                    <span class="quick-action-icon purple">
+                        <i class="fa-solid fa-route"></i>
+                    </span>
+
+                    <span class="quick-action-content">
+
+                        <strong>
+                            Career Paths
+                        </strong>
+
+                        <span>
+                            Discover career directions.
+                        </span>
+
+                    </span>
+
+                    <span class="quick-action-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+
+                </a>
+
+
+
+                <a href="{{ url_for('courses') }}" class="quick-action interactive-card reveal" data-delay="70">
+
+                    <span class="quick-action-icon cyan">
+                        <i class="fa-solid fa-book-open"></i>
+                    </span>
+
+                    <span class="quick-action-content">
+
+                        <strong>
+                            Courses
+                        </strong>
+
+                        <span>
+                            Continue learning.
+                        </span>
+
+                    </span>
+
+                    <span class="quick-action-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+
+                </a>
+
+
+
+                <a href="{{ url_for('coding_practice') }}" class="quick-action interactive-card reveal"
+                    data-delay="140">
+
+                    <span class="quick-action-icon blue">
+                        <i class="fa-solid fa-code"></i>
+                    </span>
+
+                    <span class="quick-action-content">
+
+                        <strong>
+                            Coding Practice
+                        </strong>
+
+                        <span>
+                            Strengthen problem solving.
+                        </span>
+
+                    </span>
+
+                    <span class="quick-action-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+
+                </a>
+
+
+
+                <a href="{{ url_for('aptitude_test') }}" class="quick-action interactive-card reveal" data-delay="210">
+
+                    <span class="quick-action-icon green">
+                        <i class="fa-solid fa-brain"></i>
+                    </span>
+
+                    <span class="quick-action-content">
+
+                        <strong>
+                            Aptitude Tests
+                        </strong>
+
+                        <span>
+                            Practice assessments.
+                        </span>
+
+                    </span>
+
+                    <span class="quick-action-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SAVED COURSES + CODING ACTIVITY -->
+
+        <section class="dashboard-section">
+
+            <div class="dashboard-two-column">
+
+
+                <!-- SAVED COURSES -->
+
+                <article class="dashboard-card reveal reveal-left">
+
+                    <div class="card-header">
+
+                        <div class="card-heading">
+
+                            <span class="card-icon purple">
+
+                                <i class="fa-solid fa-bookmark"></i>
+
+                            </span>
+
+                            <div>
+
+                                <span class="card-eyebrow">
+                                    LEARNING
+                                </span>
+
+                                <h3>
+                                    Saved Courses
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <a href="{{ url_for('courses') }}" class="card-link">
+
+                            View all
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    {% if saved_courses %}
+
+                    <div class="activity-list">
+
+                        {% for saved in saved_courses[:5] %}
+
+                        <div class="activity-item reveal">
+
+                            <div class="activity-icon purple">
+
+                                <i class="fa-solid fa-book-open"></i>
+
+                            </div>
+
+
+                            <div class="activity-content">
+
+                                <strong>
+                                    {{ saved.course.title }}
+                                </strong>
+
+                                <span>
+                                    Saved course
+                                </span>
+
+                            </div>
+
+
+                            <i class="fa-solid fa-chevron-right activity-arrow"></i>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="empty-state compact">
+
+                        <div class="empty-state-icon">
+
+                            <i class="fa-solid fa-book-open"></i>
+
+                        </div>
+
+                        <h4>
+                            No saved courses
+                        </h4>
+
+                        <p>
+                            Explore courses and save the ones you want to learn.
+                        </p>
+
+                        <a href="{{ url_for('courses') }}" class="small-premium-button">
+
+                            Explore Courses
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+                    {% endif %}
+
+                </article>
+
+
+
+                <!--        CODING ACTIVITY
+                     -->
+
+                <article class="dashboard-card reveal reveal-right">
+
+                    <div class="card-header">
+
+                        <div class="card-heading">
+
+                            <span class="card-icon cyan">
+
+                                <i class="fa-solid fa-terminal"></i>
+
+                            </span>
+
+                            <div>
+
+                                <span class="card-eyebrow">
+                                    PRACTICE
+                                </span>
+
+                                <h3>
+                                    Coding Activity
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <a href="{{ url_for('coding_practice') }}" class="card-link">
+
+                            Practice
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    {% if submissions %}
+
+                    <div class="activity-list">
+
+                        {% for submission in submissions[:5] %}
+
+                        <div class="activity-item reveal">
+
+                            <div class="activity-icon cyan">
+
+                                <i class="fa-solid fa-code"></i>
+
+                            </div>
+
+
+                            <div class="activity-content">
+
+                                <strong>
+                                    {{ submission.problem.title }}
+                                </strong>
+
+                                <span>
+
+                                    {% if submission.status %}
+                                    {{ submission.status }}
+                                    {% else %}
+                                    Submission
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+
+                            <span class="activity-status">
+
+                                {% if submission.status and submission.status|lower == 'accepted' %}
+
+                                <i class="fa-solid fa-circle-check"></i>
+
+                                {% else %}
+
+                                <i class="fa-solid fa-code"></i>
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="empty-state compact">
+
+                        <div class="empty-state-icon">
+
+                            <i class="fa-solid fa-terminal"></i>
+
+                        </div>
+
+                        <h4>
+                            No coding activity
+                        </h4>
+
+                        <p>
+                            Start solving problems and build your coding confidence.
+                        </p>
+
+                        <a href="{{ url_for('coding_practice') }}" class="small-premium-button">
+
+                            Start Practicing
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+                    {% endif %}
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- FINAL CTA -->
+
+        <section class="dashboard-final-cta reveal">
+
+            <div class="final-cta-glow"></div>
+
+
+            <div class="final-cta-icon">
+
+                <i class="fa-solid fa-compass"></i>
+
+            </div>
+
+
+            <div class="final-cta-content">
+
+                <span>
+                    KEEP MOVING FORWARD
+                </span>
+
+                <h2>
+                    Your next opportunity starts with your next step.
+                </h2>
+
+                <p>
+                    Learn something new, practice a skill,
+                    or explore where your career can go next.
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('career_path') }}" class="premium-button premium-button-primary">
+
+                <span>
+                    Continue Journey
+                </span>
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+        </section>
+
+
+    </div>
+
+
+
+    <!-- CAREER JOURNEY MODAL -->
+
+    <div class="dashboard-modal" id="journeyModal" hidden>
+
+        <div class="dashboard-modal-backdrop" data-close-modal></div>
+
+
+        <div class="dashboard-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="journeyModalTitle">
+
+
+            <button type="button" class="modal-close" id="closeJourneyModal" aria-label="Close">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+
+            <div class="modal-icon">
+
+                <i class="fa-solid fa-route"></i>
+
+            </div>
+
+
+            <span class="modal-eyebrow">
+                CAREER JOURNEY
+            </span>
+
+
+            <h2 id="journeyModalTitle">
+                Your Career Progress
+            </h2>
+
+
+            <p class="modal-description">
+                Keep building your skills and completing each stage
+                of your career development journey.
+            </p>
+
+
+            <div class="modal-progress-card">
+
+                <div>
+
+                    <span>
+                        Overall progress
+                    </span>
+
+                    <strong>
+                        {{ progress }}%
+                    </strong>
+
+                </div>
+
+
+                <div class="premium-progress">
+
+                    <span class="premium-progress-fill" data-progress="{{ progress }}"></span>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-steps">
+
+                <div class="modal-step completed">
+
+                    <span>
+                        <i class="fa-solid fa-check"></i>
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Profile Created
+                        </strong>
+
+                        <small>
+                            Your profile is ready.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-step completed">
+
+                    <span>
+                        <i class="fa-solid fa-check"></i>
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Career Exploration
+                        </strong>
+
+                        <small>
+                            Explore different career directions.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-step active">
+
+                    <span>
+                        <i class="fa-solid fa-chart-line"></i>
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Build Skills
+                        </strong>
+
+                        <small>
+                            Improve your technical capabilities.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-step">
+
+                    <span>
+                        <i class="fa-solid fa-flag-checkered"></i>
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Career Ready
+                        </strong>
+
+                        <small>
+                            Prepare for applications and interviews.
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <a href="{{ url_for('profile') }}" class="modal-action">
+
+                <span>
+                    Update My Profile
+                </span>
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+</div>
+
+<!-- CAREER OVERVIEW DETAILS MODAL -->
+
+<div class="dashboard-modal overview-details-modal" id="overviewDetailsModal" hidden>
+
+    <div class="dashboard-modal-backdrop" data-close-overview-modal>
+    </div>
+
+
+    <div class="dashboard-modal-dialog overview-details-dialog" role="dialog" aria-modal="true"
+        aria-labelledby="overviewDetailsTitle">
+
+
+        <!-- MODAL HEADER -->
+
+        <div class="overview-modal-header">
+
+            <div class="overview-modal-heading">
+
+                <div class="overview-modal-icon" id="overviewModalIcon">
+
+                    <i class="fa-solid fa-book-open"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span class="modal-eyebrow" id="overviewModalEyebrow">
+
+                        LEARNING
+
+                    </span>
+
+
+                    <h2 id="overviewDetailsTitle">
+                        Saved Courses
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <button type="button" class="modal-close" id="closeOverviewModal" aria-label="Close details">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- MODAL BODY -->
+
+        <div class="overview-modal-body" id="overviewModalBody">
+        </div>
+
+
+
+        <!-- MODAL FOOTER NAVIGATION -->
+
+        <div class="overview-modal-footer">
+
+            <button type="button" class="overview-modal-back" id="overviewModalBack">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                <span>
+                    Back
+                </span>
+
+            </button>
+
+
+            <a href="{{ url_for('courses') }}" class="modal-action overview-primary-action" id="overviewPrimaryAction">
+
+                <span>
+                    View Courses
+                </span>
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- SAVED COURSE DATA -->
+
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+
+
+{% endblock %}

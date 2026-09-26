@@ -1,0 +1,419 @@
+{% extends "base.html" %}
+
+{% block title %}
+Recommended For You | Career Compass
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/recommendations.css') }}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<main class="recommendations-page">
+
+
+<!-- Ambient Background -->
+
+<div class="recommendation-ambient">
+
+    <span></span>
+    <span></span>
+    <span></span>
+
+</div>
+
+<!-- Hero -->
+
+<section class="recommendation-hero">
+
+    <div class="recommendation-eyebrow">
+
+        <span class="eyebrow-dot"></span>
+
+        COLLABORATIVE INTELLIGENCE
+
+    </div>
+
+    <h1>
+
+        Courses chosen
+
+        <span>
+            around your journey.
+        </span>
+
+    </h1>
+
+    <p>
+
+        Career Compass learns from course activity across
+        the platform and finds learning paths that may
+        match your interests.
+
+    </p>
+
+    <div class="recommendation-stats">
+
+        <div class="recommendation-stat">
+
+            <span class="stat-icon">
+                <i class="fas fa-users"></i>
+            </span>
+
+            <div>
+
+                <strong>
+                    Collaborative
+                </strong>
+
+                <small>
+                    Similar learner patterns
+                </small>
+
+            </div>
+
+        </div>
+
+        <div class="recommendation-stat">
+
+            <span class="stat-icon">
+                <i class="fas fa-brain"></i>
+            </span>
+
+            <div>
+
+                <strong>
+                    Adaptive
+                </strong>
+
+                <small>
+                    Learns from your activity
+                </small>
+
+            </div>
+
+        </div>
+
+        <div class="recommendation-stat">
+
+            <span class="stat-icon">
+                <i class="fas fa-compass"></i>
+            </span>
+
+            <div>
+
+                <strong>
+                    Personalized
+                </strong>
+
+                <small>
+                    Profile-aware recommendations
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Recommendations -->
+
+<section class="recommendation-section">
+
+    <div class="recommendation-section-heading">
+
+        <div>
+
+            <span>
+                YOUR DISCOVERY FEED
+            </span>
+
+            <h2>
+                Recommended courses
+            </h2>
+
+        </div>
+
+        <a
+            href="{{ url_for('courses') }}"
+            class="recommendation-browse-btn"
+        >
+
+            Browse all courses
+
+            <i class="fas fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+    {% if recommendations %}
+
+    <div class="recommendation-grid">
+
+        {% for item in recommendations %}
+
+        {% set course = item.course %}
+
+        <article
+            class="recommendation-card"
+            data-course-id="{{ item.course_id }}"
+            data-score="{{ item.score }}"
+        >
+
+            <!-- Glow -->
+
+            <div class="recommendation-card-glow"></div>
+
+            <!-- Top -->
+
+            <div class="recommendation-card-top">
+
+                <span class="recommendation-source">
+
+                    {% if item.source == "collaborative_filtering" %}
+
+                        <i class="fas fa-users"></i>
+                        SIMILAR LEARNERS
+
+                    {% elif item.source == "profile_relevance" %}
+
+                        <i class="fas fa-user-check"></i>
+                        PROFILE MATCH
+
+                    {% else %}
+
+                        <i class="fas fa-fire"></i>
+                        POPULAR
+
+                    {% endif %}
+
+                </span>
+
+                <span class="recommendation-score">
+
+                    {{ item.score|round|int }}%
+
+                </span>
+
+            </div>
+
+            <!-- Icon -->
+
+            <div class="recommendation-course-icon">
+
+                <i class="fas fa-graduation-cap"></i>
+
+            </div>
+
+            <!-- Content -->
+
+            <div class="recommendation-card-content">
+
+                <span class="recommendation-domain">
+
+                    {{ course.domain
+                       |replace("_", " ")
+                       |title }}
+
+                </span>
+
+                <h3>
+                    {{ course.title }}
+                </h3>
+
+                <p>
+                    {{ course.description }}
+                </p>
+
+                <div class="recommendation-tags">
+
+                    {% for skill in course.skills[:4] %}
+
+                    <span>
+                        {{ skill
+                           |replace("_", " ")
+                           |title }}
+                    </span>
+
+                    {% endfor %}
+
+                </div>
+
+                <div class="recommendation-reason">
+
+                    <i class="fas fa-sparkles"></i>
+
+                    <span>
+                        {{ item.reason }}
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+
+            <div class="recommendation-card-footer">
+
+                <span>
+
+                    <i class="fas fa-clock"></i>
+
+                    {{ course.duration }}
+
+                </span>
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'save_course',
+                        course_id=course.id
+                    ) }}"
+                    class="recommendation-save-form"
+                >
+
+                    {% if csrf_token is defined %}
+
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                    >
+
+                    {% endif %}
+
+                    <button
+                        type="submit"
+                        class="recommendation-save-btn"
+                        data-course-id="{{ course.id }}"
+                    >
+
+                        <i class="far fa-bookmark"></i>
+
+                        Save
+
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- Score Breakdown -->
+
+            <div class="recommendation-breakdown">
+
+                <div>
+
+                    <span>
+                        Collaborative
+                    </span>
+
+                    <strong>
+                        {{ item.cf_score|round|int }}%
+                    </strong>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        Profile
+                    </span>
+
+                    <strong>
+                        {{ item.profile_score|round|int }}%
+                    </strong>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        Popularity
+                    </span>
+
+                    <strong>
+                        {{ item.popularity_score|round|int }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </article>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="recommendation-empty">
+
+        <div class="empty-orbit">
+
+            <div>
+                <i class="fas fa-compass"></i>
+            </div>
+
+        </div>
+
+        <span>
+            RECOMMENDATION ENGINE
+        </span>
+
+        <h3>
+            Your learning map is still forming.
+        </h3>
+
+        <p>
+
+            Save a few courses and explore different
+            learning areas. As Career Compass collects
+            more activity, it can discover patterns
+            between learners and improve your
+            recommendations.
+
+        </p>
+
+        <a
+            href="{{ url_for('courses') }}"
+            class="recommendation-empty-btn"
+        >
+
+            Explore courses
+
+            <i class="fas fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+
+</main>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/recommendations.js'
+    ) }}"
+></script>
+
+{% endblock %}

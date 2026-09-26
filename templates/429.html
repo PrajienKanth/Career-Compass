@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+
+{% block title %}Too Many Requests - Career Compass{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="error-page error-429-page">
+
+    <!-- Ambient Background -->
+    <div class="error-ambient" aria-hidden="true">
+
+        <span class="error-orb error-orb-one"></span>
+        <span class="error-orb error-orb-two"></span>
+        <span class="error-orb error-orb-three"></span>
+
+    </div>
+
+    <!-- Background Grid -->
+    <div class="error-grid" aria-hidden="true"></div>
+
+    <!-- Floating Particles -->
+    <div class="error-particles" aria-hidden="true">
+
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </div>
+
+    <!-- Error Container -->
+    <main class="error-container">
+
+        <section class="error-card" data-error-card>
+
+            <!-- Status -->
+            <div class="error-status">
+
+                <span class="error-status-dot"></span>
+
+                <span>
+                    REQUEST LIMIT
+                </span>
+
+            </div>
+
+            <!-- Error Visual -->
+            <div class="error-visual">
+
+                <div class="error-visual-glow"></div>
+
+                <div class="error-ring error-ring-one"></div>
+
+                <div class="error-ring error-ring-two"></div>
+
+                <div class="error-icon-wrapper">
+
+                    <i class="fas fa-gauge-high"></i>
+
+                </div>
+
+                <!-- Floating Icon 1 -->
+                <div class="error-floating-symbol symbol-one">
+
+                    <i class="fas fa-bolt"></i>
+
+                </div>
+
+                <!-- Floating Icon 2 -->
+                <div class="error-floating-symbol symbol-two">
+
+                    <i class="fas fa-clock"></i>
+
+                </div>
+
+                <!-- Floating Icon 3 -->
+                <div class="error-floating-symbol symbol-three">
+
+                    <i class="fas fa-hourglass-half"></i>
+
+                </div>
+
+            </div>
+
+            <!-- Error Code -->
+            <div class="error-code">
+
+                <span>4</span>
+                <span>2</span>
+                <span>9</span>
+
+            </div>
+
+            <!-- Error Content -->
+            <div class="error-content">
+
+                <span class="error-label">
+                    TOO MANY REQUESTS
+                </span>
+
+                <h1>
+                    Let's slow things down for a moment
+                </h1>
+
+                <p class="error-description">
+
+                    Career Compass has received too many requests
+                    in a short period of time. Please wait a little
+                    while before trying this action again.
+
+                </p>
+
+                <!-- Help Card -->
+                <div class="error-help">
+
+                    <div class="error-help-icon">
+
+                        <i class="fas fa-clock"></i>
+
+                    </div>
+
+                    <div class="error-help-content">
+
+                        <strong>
+                            Give it a moment
+                        </strong>
+
+                        <span>
+
+                            Wait briefly and then try your request
+                            again. This temporary limit helps keep
+                            Career Compass responsive for everyone.
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="error-actions">
+
+                    <!-- Home -->
+                    <a
+                        href="{{ url_for('index') }}"
+                        class="error-btn error-btn-primary"
+                    >
+
+                        <span class="error-btn-icon">
+
+                            <i class="fas fa-house"></i>
+
+                        </span>
+
+                        <span>
+                            Return Home
+                        </span>
+
+                    </a>
+
+                    <!-- Back -->
+                    <button
+                        type="button"
+                        class="error-btn error-btn-secondary"
+                        data-error-back
+                    >
+
+                        <span class="error-btn-icon">
+
+                            <i class="fas fa-arrow-left"></i>
+
+                        </span>
+
+                        <span>
+                            Go Back
+                        </span>
+
+                    </button>
+
+                    <!-- Refresh -->
+                    <button
+                        type="button"
+                        class="error-btn error-btn-secondary"
+                        data-refresh-page
+                    >
+
+                        <span class="error-btn-icon">
+
+                            <i class="fas fa-rotate-right"></i>
+
+                        </span>
+
+                        <span>
+                            Try Again
+                        </span>
+
+                    </button>
+
+                </div>
+
+                <!-- Support -->
+                <div class="error-support">
+
+                    <span class="error-support-icon">
+
+                        <i class="fas fa-shield-halved"></i>
+
+                    </span>
+
+                    <p>
+
+                        This is usually temporary. Please wait a
+                        short while and try again rather than
+                        repeatedly refreshing the page.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Error Footer -->
+            <div class="error-footer">
+
+                <div class="error-footer-brand">
+
+                    <span class="error-footer-logo">
+
+                        <i class="fas fa-compass"></i>
+
+                    </span>
+
+                    <span>
+                        Career Compass
+                    </span>
+
+                </div>
+
+                <span class="error-footer-divider"></span>
+
+                <span class="error-footer-text">
+                    A short pause. Then back to your journey.
+                </span>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script
+    src="{{ url_for('static', filename='js/error.js') }}"
+    defer>
+</script>
+
+{% endblock %}

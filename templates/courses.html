@@ -1,0 +1,773 @@
+{% extends "base.html" %}
+
+{% block title %}Courses — Career Compass{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/courses.css') }}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="courses-page">
+
+    <!-- Ambient Background -->
+
+    <div
+        class="courses-ambient courses-ambient-one"
+        aria-hidden="true">
+    </div>
+
+    <div
+        class="courses-ambient courses-ambient-two"
+        aria-hidden="true">
+    </div>
+
+    <div
+        class="courses-grid-bg"
+        aria-hidden="true">
+    </div>
+
+
+    <!-- Hero -->
+
+    <section class="courses-hero cc-reveal">
+
+        <div
+            class="courses-hero-glow"
+            aria-hidden="true">
+        </div>
+
+
+        <div class="courses-hero-content">
+
+            <div class="courses-eyebrow">
+
+                <span class="eyebrow-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                </span>
+
+                <span>Career Learning Hub</span>
+
+                <span class="eyebrow-pulse"></span>
+
+            </div>
+
+
+            <h1>
+                Learn skills that
+                <span>move you forward.</span>
+            </h1>
+
+
+            <p>
+                Explore courses aligned with your academic background,
+                technical interests and career goals. Save the ones
+                you want to continue later.
+            </p>
+
+
+            <div class="hero-stats">
+
+                <div class="hero-stat">
+
+                    <strong
+                        data-count="{{ courses|length }}"
+                        id="courseHeroCount"
+                    >
+                        {{ courses|length }}
+                    </strong>
+
+                    <span>Available Courses</span>
+
+                </div>
+
+
+                <div class="hero-stat-divider"></div>
+
+
+                <div class="hero-stat">
+
+                    <strong
+                        data-count="{{ domains|length }}"
+                        id="domainHeroCount"
+                    >
+                        {{ domains|length }}
+                    </strong>
+
+                    <span>Learning Domains</span>
+
+                </div>
+
+
+                <div class="hero-stat-divider"></div>
+
+
+                <div class="hero-stat hero-stat-highlight">
+
+                    <strong>
+                        <i class="fa-solid fa-sparkles"></i>
+                    </strong>
+
+                    <span>Career Focused</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Hero Decoration -->
+
+        <div
+            class="hero-decoration"
+            aria-hidden="true"
+        >
+
+            <div class="hero-orbit hero-orbit-one"></div>
+
+            <div class="hero-orbit hero-orbit-two"></div>
+
+            <div class="hero-orbit-core">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Catalog Toolbar -->
+
+    <section class="catalog-toolbar cc-reveal">
+
+        <div class="course-search">
+
+            <div class="search-icon">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+
+
+            <input
+                type="search"
+                id="courseSearch"
+                placeholder="Search courses, skills or domains..."
+                autocomplete="off"
+                aria-label="Search courses"
+            >
+
+
+            <button
+                type="button"
+                class="search-clear"
+                id="searchClear"
+                aria-label="Clear search"
+                title="Clear search"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="course-count-wrap">
+
+            <span class="course-count-label">
+                Showing
+            </span>
+
+            <strong id="visibleCourseCount">
+                {{ courses|length }}
+            </strong>
+
+            <span class="course-count-label">
+                courses
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- Main Layout -->
+
+    <div class="courses-layout">
+
+
+        <!-- Filter Sidebar -->
+
+        <aside class="filter-card cc-reveal">
+
+            <div class="filter-heading">
+
+                <div class="filter-title">
+
+                    <span class="filter-icon">
+                        <i class="fa-solid fa-sliders"></i>
+                    </span>
+
+                    <div>
+
+                        <h2>Filters</h2>
+
+                        <span>
+                            Refine your learning path
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-divider"></div>
+
+
+            <!-- Domain -->
+
+            <div class="filter-group">
+
+                <label
+                    class="filter-label"
+                    for="domainFilter"
+                >
+
+                    <i class="fa-solid fa-layer-group"></i>
+
+                    Academic Domain
+
+                </label>
+
+
+                <div class="select-wrapper">
+
+                    <select
+                        id="domainFilter"
+                        class="filter-select"
+                    >
+
+                        <option value="">
+                            All domains
+                        </option>
+
+
+                        {% for domain in domains %}
+
+                        <option
+                            value="{{ domain|lower }}"
+                            {% if selected_domain and
+                                  selected_domain|lower == domain|lower %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ domain }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+
+                    <i class="fa-solid fa-chevron-down"></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- Institution -->
+
+            <div class="filter-group">
+
+                <label
+                    class="filter-label"
+                    for="institutionFilter"
+                >
+
+                    <i class="fa-solid fa-building-columns"></i>
+
+                    Institution
+
+                </label>
+
+
+                <div class="select-wrapper">
+
+                    <select
+                        id="institutionFilter"
+                        class="filter-select"
+                    >
+
+                        <option value="">
+                            All institutions
+                        </option>
+
+
+                        {% set institutions = [] %}
+
+                        {% for course in courses %}
+
+                            {% if course.institution
+                                  and course.institution not in institutions %}
+
+                                {% set _ = institutions.append(
+                                    course.institution
+                                ) %}
+
+                            {% endif %}
+
+                        {% endfor %}
+
+
+                        {% for institution in institutions %}
+
+                        <option
+                            value="{{ institution|lower }}"
+                        >
+                            {{ institution }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                    <i class="fa-solid fa-chevron-down"></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- Duration -->
+
+            <div class="filter-group">
+
+                <label
+                    class="filter-label"
+                    for="durationFilter"
+                >
+
+                    <i class="fa-regular fa-clock"></i>
+
+                    Duration
+
+                </label>
+
+
+                <div class="select-wrapper">
+
+                    <select
+                        id="durationFilter"
+                        class="filter-select"
+                    >
+
+                        <option value="">
+                            Any duration
+                        </option>
+
+                        <option value="short">
+                            Short — up to 4 months
+                        </option>
+
+                        <option value="medium">
+                            Medium — 5 to 12 months
+                        </option>
+
+                        <option value="long">
+                            Long — above 12 months
+                        </option>
+
+                    </select>
+
+                    <i class="fa-solid fa-chevron-down"></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- Filter Status -->
+
+            <div
+                class="active-filter-status"
+                id="activeFilterStatus"
+            >
+
+                <i class="fa-solid fa-filter"></i>
+
+                <span>
+                    No filters applied
+                </span>
+
+            </div>
+
+
+            <!-- Clear Filters -->
+
+            <button
+                type="button"
+                class="clear-filters"
+                id="clearFilters"
+            >
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+                <span>Clear Filters</span>
+
+            </button>
+
+        </aside>
+
+
+        <!-- Course Catalog -->
+
+        <section class="course-catalog">
+
+
+            <!-- Catalog Header -->
+
+            <div class="catalog-header cc-reveal">
+
+                <div>
+
+                    <span class="catalog-kicker">
+
+                        <i class="fa-solid fa-compass"></i>
+
+                        Explore
+
+                    </span>
+
+
+                    <h2>
+                        Courses for your journey
+                    </h2>
+
+                </div>
+
+
+                <div class="catalog-status">
+
+                    <span class="status-dot"></span>
+
+                    <span id="catalogStatusText">
+                        All courses available
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Course Grid -->
+
+            <div
+                class="course-grid"
+                id="courseGrid"
+            >
+
+                {% for course in courses %}
+
+                <article
+                    class="course-card cc-reveal"
+
+                    data-domain="{{ course.domain|default('')|lower }}"
+
+                    data-related-domains="{{
+                        course.related_domains|default([])|join('|')|lower
+                    }}"
+
+                    data-institution="{{ course.institution|default('')|lower }}"
+
+                    data-duration="{{ course.duration|default('')|lower }}"
+
+                    data-search="
+                        {{ course.title|default('')|lower }}
+                        {{ course.domain|default('')|lower }}
+                        {{ course.description|default('')|lower }}
+                        {{ course.skills|default([])|join(' ')|lower }}
+                        {{ course.related_domains|default([])|join(' ')|lower }}
+                        {{ course.institution|default('')|lower }}
+                    "
+                >
+
+
+                    <!-- Card Glow -->
+
+                    <div
+                        class="course-card-glow"
+                        aria-hidden="true">
+                    </div>
+
+
+                    <!-- Top -->
+
+                    <div class="course-top">
+
+                        <div class="course-icon">
+
+                            <i class="fa-solid fa-graduation-cap"></i>
+
+                        </div>
+
+
+                        {% if course.domain %}
+
+                        <span class="course-domain">
+
+                            {{ course.domain|replace('_', ' ') }}
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Title -->
+
+                    <h3>
+                        {{ course.title|default('Untitled Course') }}
+                    </h3>
+
+
+                    <!-- Institution -->
+
+                    {% if course.institution %}
+
+                    <div class="course-institution">
+
+                        <span class="institution-icon">
+
+                            <i class="fa-solid fa-building-columns"></i>
+
+                        </span>
+
+                        <span>
+                            {{ course.institution }}
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- Description -->
+
+                    <p class="course-description">
+
+                        {{ course.description|default(
+                            'Build practical knowledge and strengthen your career-ready skills.'
+                        )|truncate(180) }}
+
+                    </p>
+
+
+                    <!-- Meta -->
+
+                    <div class="course-meta">
+
+                        {% if course.duration %}
+
+                        <span>
+
+                            <i class="fa-regular fa-clock"></i>
+
+                            {{ course.duration }}
+
+                        </span>
+
+                        {% endif %}
+
+
+                        {% if course.level %}
+
+                        <span>
+
+                            <i class="fa-solid fa-signal"></i>
+
+                            {{ course.level }}
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Skills -->
+
+                    {% if course.skills %}
+
+                    <div class="course-skills">
+
+                        <span class="course-skills-label">
+                            Skills
+                        </span>
+
+
+                        <div class="skill-tags">
+
+                            {% for skill in course.skills[:5] %}
+
+                            <span class="skill-tag">
+
+                                {{ skill|replace('_', ' ') }}
+
+                            </span>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- Footer -->
+
+                    <div class="course-footer">
+
+                        <div class="course-related">
+
+                            <span class="related-icon">
+
+                                <i class="fa-solid fa-link"></i>
+
+                            </span>
+
+
+                            <span>
+
+                                {% if course.related_domains %}
+
+                                    Related:
+                                    {{ course.related_domains
+                                        |map('replace', '_', ' ')
+                                        |join(', ') }}
+
+                                {% else %}
+
+                                    Career development
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'save_course',
+                                course_id=course.id
+                            ) }}"
+                            class="save-course-form"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="{{ csrf_token() }}"
+                            >
+
+
+                            <button
+                                type="submit"
+                                class="save-course-btn"
+                            >
+
+                                <i class="fa-regular fa-bookmark"></i>
+
+                                <span>
+                                    Save Course
+                                </span>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </article>
+
+                {% endfor %}
+
+
+                <!-- Empty State -->
+
+                <div
+                    class="no-results"
+                    id="noResults"
+                >
+
+                    <div class="no-results-animation">
+
+                        <div class="no-results-ring"></div>
+
+                        <div class="no-results-icon">
+
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <strong>
+                        No courses found
+                    </strong>
+
+
+                    <span>
+                        Try a different search term or clear the filters.
+                    </span>
+
+
+                    <button
+                        type="button"
+                        id="emptyClearFilters"
+                        class="empty-reset-btn"
+                    >
+
+                        <i class="fa-solid fa-rotate-left"></i>
+
+                        Reset Search
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{{ url_for('static', filename='js/courses.js') }}"
+    defer>
+</script>
+
+{% endblock %}

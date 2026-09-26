@@ -1,0 +1,1350 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile — Career Compass{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/edit-profile.css') }}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="edit-profile-page">
+
+    <!-- Ambient Background -->
+
+    <div class="edit-ambient" aria-hidden="true">
+
+        <span class="ambient-orb orb-one"></span>
+        <span class="ambient-orb orb-two"></span>
+        <span class="ambient-orb orb-three"></span>
+        <span class="ambient-grid"></span>
+
+    </div>
+
+
+    <!-- Header -->
+
+    <header class="edit-page-header reveal">
+
+        <div class="header-content">
+
+            <div class="header-badge">
+
+                <span class="badge-dot"></span>
+
+                PROFILE SETTINGS
+
+            </div>
+
+
+            <h1>
+                Shape your
+                <span>Career Profile</span>
+            </h1>
+
+
+            <p>
+                Keep your profile updated so Career Compass can
+                understand your background, skills and interests.
+            </p>
+
+        </div>
+
+
+        <div
+            class="header-decoration"
+            aria-hidden="true"
+        >
+
+            <div class="header-ring ring-one"></div>
+            <div class="header-ring ring-two"></div>
+
+            <div class="header-core">
+
+                <i class="fa-solid fa-user-pen"></i>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    {% if form.errors %}
+
+    <!-- Form Alert -->
+
+    <div class="form-alert reveal">
+
+        <div class="alert-icon">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <div>
+
+            <strong>
+                Some information needs attention
+            </strong>
+
+            <p>
+                Please review the highlighted fields and correct
+                them before saving your profile.
+            </p>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <div class="edit-profile-layout">
+
+
+        <!-- Profile Preview -->
+
+        <aside class="profile-preview-card reveal">
+
+            <div class="preview-glow"></div>
+
+
+            <div class="preview-header">
+
+                <span>
+                    PROFILE PREVIEW
+                </span>
+
+                <i class="fa-solid fa-eye"></i>
+
+            </div>
+
+
+            <div class="preview-avatar-wrapper">
+
+                <div
+                    class="preview-avatar"
+                    id="profilePreview"
+                >
+
+                    {% if current_user.profile_photo
+                    and current_user.profile_photo != 'default_profile.jpg' %}
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='uploads/' ~ current_user.profile_photo
+                        ) }}"
+                        alt="{{ current_user.username }}"
+                    >
+
+                    {% else %}
+
+                    <span class="avatar-initial">
+                        {{ current_user.username[:1]|upper }}
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="avatar-status">
+
+                    <span></span>
+
+                    Profile active
+
+                </div>
+
+            </div>
+
+
+            <h2 class="preview-name">
+                {{ current_user.username }}
+            </h2>
+
+
+            <p class="preview-email">
+                {{ current_user.email }}
+            </p>
+
+
+            {% if current_user.academic_domain
+            or current_user.specialization %}
+
+            <div class="preview-tags">
+
+                {% if current_user.academic_domain %}
+
+                <span>
+
+                    <i class="fa-solid fa-graduation-cap"></i>
+
+                    {{ current_user.academic_domain }}
+
+                </span>
+
+                {% endif %}
+
+
+                {% if current_user.specialization %}
+
+                <span>
+
+                    <i class="fa-solid fa-code"></i>
+
+                    {{ current_user.specialization }}
+
+                </span>
+
+                {% endif %}
+
+            </div>
+
+            {% endif %}
+
+
+            <div class="preview-divider"></div>
+
+
+            <div class="preview-completion">
+
+                <div class="completion-heading">
+
+                    <span>
+                        Profile readiness
+                    </span>
+
+                    <strong id="previewCompletion">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="completion-track">
+
+                    <div
+                        class="completion-fill"
+                        id="previewCompletionBar"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="preview-tip">
+
+                <div class="preview-tip-icon">
+
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Career Compass Tip
+                    </strong>
+
+                    <p>
+                        Complete more sections to help generate
+                        more personalized career recommendations.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- Form -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="edit-form-card reveal"
+            id="editProfileForm"
+        >
+
+            {{ form.hidden_tag() }}
+
+
+            <!-- Personal Information -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+
+                    <div class="section-heading-content">
+
+                        <span class="section-number">
+                            01
+                        </span>
+
+
+                        <div>
+
+                            <h2>
+                                Personal Information
+                            </h2>
+
+                            <p>
+                                Your basic account and identity details
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Username -->
+
+                    <div
+                        class="field-wrapper
+                        {% if form.username.errors %}has-error{% endif %}"
+                    >
+
+                        {{ form.username.label(class="form-label") }}
+
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-at input-icon"></i>
+
+                            {{ form.username(
+                                class="form-control",
+                                placeholder="Enter your username",
+                                autocomplete="username"
+                            ) }}
+
+                        </div>
+
+
+                        {% for error in form.username.errors %}
+
+                        <div class="field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            {{ error }}
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div
+                        class="field-wrapper
+                        {% if form.email.errors %}has-error{% endif %}"
+                    >
+
+                        {{ form.email.label(class="form-label") }}
+
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-envelope input-icon"></i>
+
+                            {{ form.email(
+                                class="form-control",
+                                placeholder="Enter your email",
+                                autocomplete="email"
+                            ) }}
+
+                        </div>
+
+
+                        {% for error in form.email.errors %}
+
+                        <div class="field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            {{ error }}
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Date of Birth -->
+
+                    <div
+                        class="field-wrapper
+                        {% if form.date_of_birth.errors %}has-error{% endif %}"
+                    >
+
+                        {{ form.date_of_birth.label(class="form-label") }}
+
+
+                        <div class="premium-date-wrapper">
+
+                            <div class="date-icon-box">
+
+                                <i class="fa-regular fa-calendar"></i>
+
+                            </div>
+
+
+                            {{ form.date_of_birth(
+                                class="form-control premium-date-input",
+                                id="dateOfBirth"
+                            ) }}
+
+
+                            <button
+                                type="button"
+                                class="date-picker-button"
+                                id="openDatePicker"
+                                aria-label="Open date picker"
+                            >
+
+                                <i class="fa-regular fa-calendar-days"></i>
+
+                            </button>
+
+
+                            <span class="date-focus-line"></span>
+
+                        </div>
+
+
+                        <div class="date-hint">
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                            Select your date of birth
+
+                        </div>
+
+
+                        {% for error in form.date_of_birth.errors %}
+
+                        <div class="field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            {{ error }}
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Profile Photo -->
+
+                    <div class="field-wrapper">
+
+                        {{ form.profile_photo.label(class="form-label") }}
+
+
+                        <div
+                            class="premium-photo-editor"
+                            id="photoEditor"
+                        >
+
+                            <div class="photo-editor-header">
+
+                                <div>
+
+                                    <span class="photo-editor-eyebrow">
+                                        PROFILE IMAGE
+                                    </span>
+
+                                    <strong>
+                                        Personalize your photo
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="photo-editor-status">
+
+                                    <span></span>
+
+                                    Ready
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="photo-editor-main">
+
+
+                                <!-- Photo Preview -->
+
+                                <div class="photo-editor-preview-wrap">
+
+                                    <div class="photo-editor-ring ring-a"></div>
+                                    <div class="photo-editor-ring ring-b"></div>
+
+
+                                    <div
+                                        class="photo-editor-preview"
+                                        id="photoUploadPreview"
+                                    >
+
+                                        {% if current_user.profile_photo
+                                        and current_user.profile_photo != 'default_profile.jpg' %}
+
+                                        <img
+                                            src="{{ url_for(
+                                                'static',
+                                                filename='uploads/' ~ current_user.profile_photo
+                                            ) }}"
+                                            alt="Current profile photo"
+                                        >
+
+                                        {% else %}
+
+                                        <span>
+                                            {{ current_user.username[:1]|upper }}
+                                        </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Photo Content -->
+
+                                <div class="photo-upload-content">
+
+
+                                    <div class="photo-upload-title">
+
+                                        <strong>
+                                            Update profile photo
+                                        </strong>
+
+                                        <span>
+                                            Make your profile feel more personal
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="photo-upload-info">
+
+                                        <i class="fa-regular fa-image"></i>
+
+                                        <span>
+                                            JPG, JPEG, PNG, GIF or WEBP
+                                            <br>
+                                            Maximum 5 MB
+                                        </span>
+
+                                    </div>
+
+
+                                    <label class="file-select-button">
+
+                                        <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                                        <span>
+                                            Choose image
+                                        </span>
+
+
+                                        {{ form.profile_photo(
+                                            class="photo-file-input",
+                                            id="profilePhotoInput",
+                                            accept="image/jpeg,image/png,image/gif,image/webp"
+                                        ) }}
+
+                                    </label>
+
+
+                                    <small id="photoFileName">
+                                        No new image selected
+                                    </small>
+
+
+                                    <div class="photo-drop-hint">
+
+                                        <i class="fa-solid fa-arrows-up-down-left-right"></i>
+
+                                        Drag & drop an image here
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Image Adjustments -->
+
+                            <div class="photo-adjustments-panel">
+
+
+                                <div class="photo-adjustments-header">
+
+                                    <div>
+
+                                        <span>
+                                            IMAGE ADJUSTMENTS
+                                        </span>
+
+                                        <small>
+                                            Fine tune your profile image
+                                        </small>
+
+                                    </div>
+
+
+                                    <button
+                                        type="button"
+                                        class="photo-reset-button"
+                                        id="resetPhotoAdjustment"
+                                    >
+
+                                        <i class="fa-solid fa-rotate-left"></i>
+
+                                        Reset
+
+                                    </button>
+
+                                </div>
+
+
+                                <div class="photo-adjustments-grid">
+
+
+                                    <!-- Zoom -->
+
+                                    <div class="photo-control">
+
+                                        <div class="photo-control-heading">
+
+                                            <div>
+
+                                                <i class="fa-solid fa-magnifying-glass-plus"></i>
+
+                                                <span>
+                                                    Zoom
+                                                </span>
+
+                                            </div>
+
+                                            <strong id="photoZoomValue">
+                                                100%
+                                            </strong>
+
+                                        </div>
+
+
+                                        <input
+                                            type="range"
+                                            id="photoZoom"
+                                            min="100"
+                                            max="180"
+                                            value="100"
+                                            step="1"
+                                        >
+
+                                    </div>
+
+
+                                    <!-- Horizontal -->
+
+                                    <div class="photo-control">
+
+                                        <div class="photo-control-heading">
+
+                                            <div>
+
+                                                <i class="fa-solid fa-arrows-left-right"></i>
+
+                                                <span>
+                                                    Horizontal
+                                                </span>
+
+                                            </div>
+
+                                            <strong id="photoPositionXValue">
+                                                0
+                                            </strong>
+
+                                        </div>
+
+
+                                        <input
+                                            type="range"
+                                            id="photoPositionX"
+                                            min="-50"
+                                            max="50"
+                                            value="0"
+                                            step="1"
+                                        >
+
+                                    </div>
+
+
+                                    <!-- Vertical -->
+
+                                    <div class="photo-control">
+
+                                        <div class="photo-control-heading">
+
+                                            <div>
+
+                                                <i class="fa-solid fa-arrows-up-down"></i>
+
+                                                <span>
+                                                    Vertical
+                                                </span>
+
+                                            </div>
+
+                                            <strong id="photoPositionYValue">
+                                                0
+                                            </strong>
+
+                                        </div>
+
+
+                                        <input
+                                            type="range"
+                                            id="photoPositionY"
+                                            min="-50"
+                                            max="50"
+                                            value="0"
+                                            step="1"
+                                        >
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="photo-upload-footer">
+
+                                <i class="fa-solid fa-shield-halved"></i>
+
+                                Your image stays private and is used only
+                                for your Career Compass profile.
+
+                            </div>
+
+                        </div>
+
+
+                        {% for error in form.profile_photo.errors %}
+
+                        <div class="field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            {{ error }}
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Academic Information -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon cyan">
+
+                        <i class="fa-solid fa-graduation-cap"></i>
+
+                    </div>
+
+
+                    <div class="section-heading-content">
+
+                        <span class="section-number">
+                            02
+                        </span>
+
+
+                        <div>
+
+                            <h2>
+                                Academic Information
+                            </h2>
+
+                            <p>
+                                Tell us about your education and specialization
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Academic Domain -->
+
+                    <div
+                        class="field-wrapper
+                        {% if form.academic_domain.errors %}has-error{% endif %}"
+                    >
+
+                        {{ form.academic_domain.label(class="form-label") }}
+
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-building-columns input-icon"></i>
+
+                            {{ form.academic_domain(
+                                class="form-control",
+                                placeholder="e.g. Computer Science, Data Science"
+                            ) }}
+
+                        </div>
+
+
+                        {% for error in form.academic_domain.errors %}
+
+                        <div class="field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            {{ error }}
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Specialization -->
+
+                    <div
+                        class="field-wrapper
+                        {% if form.specialization.errors %}has-error{% endif %}"
+                    >
+
+                        {{ form.specialization.label(class="form-label") }}
+
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-microchip input-icon"></i>
+
+                            {{ form.specialization(
+                                class="form-control",
+                                placeholder="e.g. Artificial Intelligence"
+                            ) }}
+
+                        </div>
+
+
+                        {% for error in form.specialization.errors %}
+
+                        <div class="field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            {{ error }}
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Skills -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon orange">
+
+                        <i class="fa-solid fa-chart-simple"></i>
+
+                    </div>
+
+
+                    <div class="section-heading-content">
+
+                        <span class="section-number">
+                            03
+                        </span>
+
+
+                        <div>
+
+                            <h2>
+                                Skills
+                            </h2>
+
+                            <p>
+                                Adjust each skill from 0 to 5
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {% set skill_fields = [
+                    ('programming', 'Programming', 'fa-code'),
+                    ('data_structures', 'Data Structures', 'fa-diagram-project'),
+                    ('algorithms', 'Algorithms', 'fa-route'),
+                    ('database', 'Databases', 'fa-database'),
+                    ('web_development', 'Web Development', 'fa-globe'),
+                    ('machine_learning', 'Machine Learning', 'fa-brain')
+                ] %}
+
+
+                <div class="skills-grid">
+
+
+                    {% for field_name, field_label, field_icon in skill_fields %}
+
+                    {% set field = skills_form[field_name] %}
+
+
+                    <div
+                        class="skill-input reveal-small"
+                        data-level="{{ field.data if field.data is not none else 0 }}"
+                    >
+
+                        <div class="skill-card-glow"></div>
+
+
+                        <div class="skill-input-top">
+
+
+                            <div class="skill-label-wrap">
+
+                                <div class="skill-icon">
+
+                                    <i class="fa-solid {{ field_icon }}"></i>
+
+                                </div>
+
+
+                                <div class="skill-title-group">
+
+                                    <label for="{{ field.id }}-range">
+                                        {{ field_label }}
+                                    </label>
+
+                                    <span>
+                                        Skill confidence
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <span
+                                class="skill-value"
+                                id="{{ field.id }}-range-value"
+                            >
+
+                                {{ field.data if field.data is not none else 0 }}/5
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Hidden Flask Select -->
+
+                        <div class="skill-hidden-field">
+
+                            {{ field(
+                                class="skill-select-hidden",
+                                id=field.id
+                            ) }}
+
+                        </div>
+
+
+                        <!-- Custom Range -->
+
+                        <div class="skill-range-wrapper">
+
+
+                            <div class="skill-range-track">
+
+                                <input
+                                    type="range"
+                                    id="{{ field.id }}-range"
+                                    class="skill-range"
+                                    min="0"
+                                    max="5"
+                                    step="1"
+                                    value="{{ field.data if field.data is not none else 0 }}"
+                                    data-skill-name="{{ field.name }}"
+                                    data-select-id="{{ field.id }}"
+                                    aria-label="{{ field_label }} skill level"
+                                >
+
+                            </div>
+
+
+                            <div class="range-markers">
+
+                                <span data-level="0">0</span>
+                                <span data-level="1">1</span>
+                                <span data-level="2">2</span>
+                                <span data-level="3">3</span>
+                                <span data-level="4">4</span>
+                                <span data-level="5">5</span>
+
+                            </div>
+
+
+                            <div class="skill-level-row">
+
+                                <div
+                                    class="skill-level-label"
+                                    id="{{ field.id }}-range-level"
+                                >
+
+                                    {% if field.data is none or field.data == 0 %}
+
+                                    Not Proficient
+
+                                    {% elif field.data == 1 %}
+
+                                    Beginner
+
+                                    {% elif field.data == 2 %}
+
+                                    Intermediate
+
+                                    {% elif field.data == 3 %}
+
+                                    Advanced
+
+                                    {% elif field.data == 4 %}
+
+                                    Expert
+
+                                    {% else %}
+
+                                    Master
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <span class="skill-level-hint">
+
+                                    0 = Beginner
+
+                                    <span>•</span>
+
+                                    5 = Master
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- Interests -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon pink">
+
+                        <i class="fa-solid fa-puzzle-piece"></i>
+
+                    </div>
+
+
+                    <div class="section-heading-content">
+
+                        <span class="section-number">
+                            04
+                        </span>
+
+
+                        <div>
+
+                            <h2>
+                                Interests & Activities
+                            </h2>
+
+                            <p>
+                                Share the experiences that shape your journey
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Sports -->
+
+                    <div
+                        class="field-wrapper
+                        {% if form.sports_achievements.errors %}has-error{% endif %}"
+                    >
+
+                        {{ form.sports_achievements.label(class="form-label") }}
+
+
+                        <div class="textarea-wrapper">
+
+                            <i class="fa-solid fa-trophy textarea-icon"></i>
+
+                            {{ form.sports_achievements(
+                                class="form-control",
+                                rows="4",
+                                placeholder="Sports achievements, teams, competitions..."
+                            ) }}
+
+                        </div>
+
+
+                        {% for error in form.sports_achievements.errors %}
+
+                        <div class="field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            {{ error }}
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Extracurricular -->
+
+                    <div
+                        class="field-wrapper
+                        {% if form.extracurricular.errors %}has-error{% endif %}"
+                    >
+
+                        {{ form.extracurricular.label(class="form-label") }}
+
+
+                        <div class="textarea-wrapper">
+
+                            <i class="fa-solid fa-people-group textarea-icon"></i>
+
+                            {{ form.extracurricular(
+                                class="form-control",
+                                rows="4",
+                                placeholder="Clubs, volunteering, events, leadership..."
+                            ) }}
+
+                        </div>
+
+
+                        {% for error in form.extracurricular.errors %}
+
+                        <div class="field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            {{ error }}
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Hobbies -->
+
+                    <div
+                        class="field-wrapper form-group-full
+                        {% if form.hobbies.errors %}has-error{% endif %}"
+                    >
+
+                        {{ form.hobbies.label(class="form-label") }}
+
+
+                        <div class="textarea-wrapper">
+
+                            <i class="fa-solid fa-heart textarea-icon"></i>
+
+                            {{ form.hobbies(
+                                class="form-control",
+                                rows="4",
+                                placeholder="Photography, reading, gaming, fitness, music..."
+                            ) }}
+
+                        </div>
+
+
+                        {% for error in form.hobbies.errors %}
+
+                        <div class="field-error">
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            {{ error }}
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Form Actions -->
+
+            <div class="form-actions">
+
+
+                <div class="form-status">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    Your information is protected
+
+                </div>
+
+
+                <div class="action-buttons">
+
+
+                    <a
+                        href="{{ url_for('profile') }}"
+                        class="btn-cancel"
+                    >
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        Cancel
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="btn-save"
+                        id="saveProfileButton"
+                    >
+
+                        <span class="button-content">
+
+                            <i class="fa-solid fa-check"></i>
+
+                            Save Changes
+
+                        </span>
+
+
+                        <span class="button-loading">
+
+                            <span class="button-spinner"></span>
+
+                            Saving...
+
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block page_extra_content %}
+
+<script
+    src="{{ url_for('static', filename='js/edit-profile.js') }}"
+    defer>
+</script>
+
+{% endblock %}

@@ -1,0 +1,880 @@
+html
+{% extends "base.html" %}
+
+{% block title %}
+{{ problem.title }} - Coding Practice
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/solve-problem.css') }}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="cc-editor-page">
+
+    <!-- Ambient Background -->
+
+    <div class="cc-editor-ambient cc-editor-ambient-one"></div>
+
+    <div class="cc-editor-ambient cc-editor-ambient-two"></div>
+
+    <div class="cc-editor-grid-bg"></div>
+
+    <!-- Top Bar -->
+
+    <header class="cc-editor-topbar">
+
+        <div class="cc-editor-breadcrumb">
+
+            <a
+                href="{{ url_for('coding_practice') }}"
+                class="cc-editor-back"
+            >
+
+                <span class="cc-back-icon">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                </span>
+
+                <span>
+                    Coding Practice
+                </span>
+
+            </a>
+
+            <span class="cc-breadcrumb-divider">
+                /
+            </span>
+
+            <span class="cc-editor-current">
+                {{ problem.title }}
+            </span>
+
+        </div>
+
+        <div class="cc-editor-problem-meta">
+
+            <span
+                class="
+                    cc-editor-difficulty
+                    difficulty-{{ problem.difficulty|lower }}
+                "
+            >
+                {{ problem.difficulty }}
+            </span>
+
+            <span class="cc-editor-topic">
+
+                <i class="fas fa-layer-group"></i>
+
+                {{ problem.topic or "General" }}
+
+            </span>
+
+        </div>
+
+    </header>
+
+    <!-- Workspace -->
+
+    <div class="cc-editor-workspace">
+
+        <!-- Problem Panel -->
+
+        <aside class="cc-problem-panel">
+
+            <div class="cc-problem-panel-scroll">
+
+                <!-- Problem Header -->
+
+                <div class="cc-problem-panel-header cc-reveal">
+
+                    <div class="cc-section-eyebrow">
+
+                        <span class="cc-eyebrow-dot"></span>
+
+                        PROBLEM
+
+                    </div>
+
+                    <h1>
+                        {{ problem.title }}
+                    </h1>
+
+                    <div class="cc-problem-header-meta">
+
+                        <span>
+
+                            <i class="fas fa-code"></i>
+
+                            Coding Challenge
+
+                        </span>
+
+                        <span>
+
+                            <i class="fas fa-circle-check"></i>
+
+                            Practice Mode
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- Description -->
+
+                <div class="cc-problem-section cc-reveal">
+
+                    <div class="cc-problem-section-title">
+
+                        <span class="cc-section-icon">
+
+                            <i class="fas fa-align-left"></i>
+
+                        </span>
+
+                        <span>
+                            Description
+                        </span>
+
+                    </div>
+
+                    <div class="cc-problem-content">
+
+                        {{ problem.description }}
+
+                    </div>
+
+                </div>
+
+                <!-- Example -->
+
+                <div class="cc-problem-section cc-reveal">
+
+                    <div class="cc-problem-section-title">
+
+                        <span class="cc-section-icon">
+
+                            <i class="fas fa-code"></i>
+
+                        </span>
+
+                        <span>
+                            Example
+                        </span>
+
+                    </div>
+
+                    <div class="cc-example-list">
+
+                        <div class="cc-example-card">
+
+                            <div class="cc-example-header">
+
+                                <div class="cc-example-label">
+
+                                    <span class="cc-example-number">
+                                        01
+                                    </span>
+
+                                    <span>
+                                        Sample
+                                    </span>
+
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="show-example-btn"
+                                    data-target="main-example"
+                                    aria-expanded="false"
+                                    aria-label="Show example"
+                                >
+
+                                    <i class="fas fa-chevron-down"></i>
+
+                                </button>
+
+                            </div>
+
+                            <div
+                                id="main-example"
+                                class="cc-example-body"
+                            >
+
+                                <pre class="cc-example-raw"><code>{{ problem.example }}</code></pre>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Test Cases -->
+
+                {% if problem.test_cases %}
+
+                <div class="cc-problem-section cc-reveal">
+
+                    <div class="cc-problem-section-title">
+
+                        <span class="cc-section-icon">
+
+                            <i class="fas fa-vial"></i>
+
+                        </span>
+
+                        <span>
+                            Test Cases
+                        </span>
+
+                        <span class="cc-section-count">
+
+                            {{ problem.test_cases|length }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="cc-example-list">
+
+                        {% for test in problem.test_cases %}
+
+                        <div class="cc-example-card">
+
+                            <div class="cc-example-header">
+
+                                <div class="cc-example-label">
+
+                                    <span class="cc-example-number">
+
+                                        {{ "%02d"|format(loop.index + 1) }}
+
+                                    </span>
+
+                                    <span>
+                                        Test {{ loop.index }}
+                                    </span>
+
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="show-example-btn"
+                                    data-target="test-{{ loop.index }}"
+                                    aria-expanded="false"
+                                    aria-label="Show test case"
+                                >
+
+                                    <i class="fas fa-chevron-down"></i>
+
+                                </button>
+
+                            </div>
+
+                            <div
+                                id="test-{{ loop.index }}"
+                                class="cc-example-body"
+                            >
+
+                                <div class="cc-example-row">
+
+                                    <span>
+                                        Input
+                                    </span>
+
+                                    <code>
+                                        {{ test.input|tojson }}
+                                    </code>
+
+                                </div>
+
+                                <div class="cc-example-row">
+
+                                    <span>
+                                        Expected
+                                    </span>
+
+                                    <code>
+                                        {{ test.expected|tojson }}
+                                    </code>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+                <!-- Tip -->
+
+                <div
+                    class="
+                        cc-problem-section
+                        cc-tip-section
+                        cc-reveal
+                    "
+                >
+
+                    <div class="cc-problem-section-title">
+
+                        <span
+                            class="
+                                cc-section-icon
+                                tip-icon
+                            "
+                        >
+
+                            <i class="fas fa-lightbulb"></i>
+
+                        </span>
+
+                        <span>
+                            Tip
+                        </span>
+
+                    </div>
+
+                    <div class="cc-problem-content">
+
+                        Start with the simplest correct approach.
+                        Think about the input, expected output,
+                        edge cases, and only then optimize.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- Coding Panel -->
+
+        <main class="cc-coding-panel">
+
+            <!-- Editor Header -->
+
+            <div class="cc-editor-header">
+
+                <div class="cc-editor-file">
+
+                    <span class="cc-file-icon">
+
+                        <i class="fas fa-file-code"></i>
+
+                    </span>
+
+                    <div class="cc-file-info">
+
+                        <span class="cc-file-name">
+
+                            solution.py
+
+                        </span>
+
+                        <span
+                            class="cc-file-status"
+                            id="editor-file-status"
+                        >
+
+                            <span></span>
+
+                            Ready
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="cc-editor-controls">
+
+                    <label
+                        for="language"
+                        class="cc-language-label"
+                    >
+
+                        <i class="fas fa-code"></i>
+
+                        Language
+
+                    </label>
+
+                    <div class="cc-language-wrapper">
+
+                        {{ form.language(
+                            id="language",
+                            class="cc-language-select"
+                        ) }}
+
+                        <i class="fas fa-chevron-down"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Code Form -->
+
+            <form
+                id="solution-form"
+                method="POST"
+                action="{{ url_for(
+                    'solve_problem',
+                    problem_id=problem.id
+                ) }}"
+            >
+
+                {{ form.hidden_tag() }}
+
+                <!-- Code Editor -->
+
+                <div class="cc-code-editor-wrapper">
+
+                    <div class="cc-editor-top-decoration">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </div>
+
+                    <div class="cc-editor-line-label">
+
+                        <span>
+                            CODE
+                        </span>
+
+                    </div>
+
+                    <textarea
+                        id="code-editor"
+                        name="code"
+                        aria-label="Code editor"
+                        spellcheck="false"
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="off"
+                    >{{ form.code.data or "" }}</textarea>
+
+                </div>
+
+                <!-- Action Bar -->
+
+                <div class="cc-editor-actionbar">
+
+                    <div class="cc-editor-hint">
+
+                        <span class="cc-hint-icon">
+
+                            <i class="fas fa-keyboard"></i>
+
+                        </span>
+
+                        <span id="editor-hint">
+
+                            Python test input is available
+                            through test_input.
+
+                        </span>
+
+                    </div>
+
+                    <div class="cc-editor-actions">
+
+                        <button
+                            type="button"
+                            id="run-code"
+                            class="cc-run-btn"
+                        >
+
+                            <i class="fas fa-play"></i>
+
+                            <span>
+                                Run
+                            </span>
+
+                        </button>
+
+                        <button
+                            type="submit"
+                            id="submit-code"
+                            class="cc-submit-code-btn"
+                        >
+
+                            <i class="fas fa-paper-plane"></i>
+
+                            <span>
+                                Submit
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+            <!-- Output -->
+
+            <section class="cc-output-panel">
+
+                <div class="cc-output-header">
+
+                    <div class="cc-output-title">
+
+                        <span class="cc-output-icon">
+
+                            <i class="fas fa-terminal"></i>
+
+                        </span>
+
+                        <div>
+
+                            <span class="cc-output-main-title">
+
+                                Test Results
+
+                            </span>
+
+                            <small>
+                                Execution output
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <span
+                        id="cc-output-status"
+                        class="cc-output-status"
+                    >
+
+                        {% if result %}
+
+                            {% if result.passed %}
+
+                                <i class="fas fa-check-circle"></i>
+
+                                All passed
+
+                            {% elif result.error %}
+
+                                <i class="fas fa-triangle-exclamation"></i>
+
+                                Runtime error
+
+                            {% else %}
+
+                                <i class="fas fa-chart-simple"></i>
+
+                                {{ result.passed_tests }}/{{ result.total_tests }}
+
+                                passed
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <i class="fas fa-hourglass-start"></i>
+
+                            Waiting
+
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+                <div
+                    id="code-output"
+                    class="cc-code-output"
+                >
+
+                    {% if result and result.results %}
+
+                    <div class="cc-test-results">
+
+                        {% for test_result in result.results %}
+
+                        <div
+                            class="
+                                cc-test-result
+                                {% if test_result.passed %}
+                                    passed
+                                {% else %}
+                                    failed
+                                {% endif %}
+                            "
+                        >
+
+                            <div class="cc-test-result-header">
+
+                                <div>
+
+                                    {% if test_result.passed %}
+
+                                    <span
+                                        class="
+                                            cc-result-icon
+                                            success
+                                        "
+                                    >
+
+                                        <i class="fas fa-check"></i>
+
+                                    </span>
+
+                                    {% else %}
+
+                                    <span
+                                        class="
+                                            cc-result-icon
+                                            failed
+                                        "
+                                    >
+
+                                        <i class="fas fa-xmark"></i>
+
+                                    </span>
+
+                                    {% endif %}
+
+                                    <strong>
+
+                                        Test {{ test_result.test_case }}
+
+                                    </strong>
+
+                                </div>
+
+                                <span>
+
+                                    {% if test_result.passed %}
+
+                                        Passed
+
+                                    {% elif test_result.error %}
+
+                                        Error
+
+                                    {% else %}
+
+                                        Failed
+
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                            <div class="cc-test-result-output">
+
+                                <span>
+                                    Output
+                                </span>
+
+                                <pre><code>{{ test_result.output }}</code></pre>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="cc-output-placeholder">
+
+                        <div class="cc-placeholder-icon">
+
+                            <i class="fas fa-play"></i>
+
+                        </div>
+
+                        <strong>
+                            Ready to execute
+                        </strong>
+
+                        <span>
+                            Run your code to see test results here.
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+            <!-- Previous Submissions -->
+
+            <section class="cc-previous-panel">
+
+                <div class="cc-output-header">
+
+                    <div class="cc-output-title">
+
+                        <span
+                            class="
+                                cc-output-icon
+                                history-icon
+                            "
+                        >
+
+                            <i class="fas fa-clock-rotate-left"></i>
+
+                        </span>
+
+                        <div>
+
+                            <span class="cc-output-main-title">
+
+                                Previous Submissions
+
+                            </span>
+
+                            <small>
+                                Your recent attempts
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="previous-solutions">
+
+                    {% if previous_submissions %}
+
+                    <div class="cc-submission-history">
+
+                        {% for submission in previous_submissions %}
+
+                        <div class="cc-submission-history-row">
+
+                            <div class="cc-submission-status-icon">
+
+                                {% if submission.status == "Accepted" %}
+
+                                    <i class="fas fa-check-circle"></i>
+
+                                {% elif submission.status == "Runtime Error" %}
+
+                                    <i class="fas fa-triangle-exclamation"></i>
+
+                                {% else %}
+
+                                    <i class="fas fa-xmark-circle"></i>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="cc-submission-info">
+
+                                <strong>
+                                    {{ submission.status }}
+                                </strong>
+
+                                <span>
+                                    {{ submission.language|capitalize }}
+                                </span>
+
+                            </div>
+
+                            <time
+                                datetime="{{ submission.submitted_date.isoformat() }}"
+                            >
+
+                                {{ submission.submitted_date.strftime(
+                                    "%d %b %Y, %I:%M %p"
+                                ) }}
+
+                            </time>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="cc-submission-placeholder">
+
+                        <div class="cc-placeholder-icon">
+
+                            <i class="fas fa-code-branch"></i>
+
+                        </div>
+
+                        <span>
+
+                            No submissions for this problem yet.
+
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</section>
+
+<!-- Starter Code Data -->
+
+<script>
+
+    window.CC_CODE_STARTERS =
+        {{ starter_codes | tojson }};
+
+
+    window.CC_CURRENT_ACTION =
+        {{ action | tojson }};
+
+</script>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script
+    src="{{ url_for('static', filename='js/solve-problem.js') }}"
+    defer
+></script>
+
+{% endblock %}
+

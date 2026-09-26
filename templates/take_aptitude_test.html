@@ -1,0 +1,764 @@
+html
+{% extends "base.html" %}
+
+{% block title %}
+    {{ test_type.capitalize() }} Aptitude Test - Career Compass
+{% endblock %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/take-aptitude-test.css') }}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="aptitude-test-page">
+
+    <!-- Ambient Background -->
+
+    <div class="aptitude-bg" aria-hidden="true">
+
+        <span class="aptitude-orb aptitude-orb-one"></span>
+
+        <span class="aptitude-orb aptitude-orb-two"></span>
+
+        <span class="aptitude-orb aptitude-orb-three"></span>
+
+        <span class="aptitude-grid"></span>
+
+    </div>
+
+    <!-- Test Hero -->
+
+    <header class="aptitude-test-hero">
+
+        <div class="aptitude-hero-inner">
+
+            <div class="aptitude-hero-content">
+
+                <div class="aptitude-eyebrow">
+
+                    <span class="eyebrow-dot"></span>
+
+                    Career Assessment
+
+                </div>
+
+                <div class="aptitude-title-row">
+
+                    <div class="aptitude-type-icon">
+
+                        {% if test_type == 'logical' %}
+
+                            <i class="fas fa-puzzle-piece"></i>
+
+                        {% elif test_type == 'verbal' %}
+
+                            <i class="fas fa-comment-alt"></i>
+
+                        {% elif test_type == 'quantitative' %}
+
+                            <i class="fas fa-calculator"></i>
+
+                        {% elif test_type == 'technical' %}
+
+                            <i class="fas fa-microchip"></i>
+
+                        {% else %}
+
+                            <i class="fas fa-brain"></i>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div>
+
+                        <h1>
+
+                            {% if test_type == 'logical' %}
+
+                                Logical Reasoning Test
+
+                            {% elif test_type == 'verbal' %}
+
+                                Verbal Ability Test
+
+                            {% elif test_type == 'quantitative' %}
+
+                                Quantitative Aptitude Test
+
+                            {% elif test_type == 'technical' %}
+
+                                Technical Knowledge Test
+
+                            {% else %}
+
+                                {{ test_type.capitalize() }} Test
+
+                            {% endif %}
+
+                        </h1>
+
+                        <p>
+                            Answer all questions carefully to complete your assessment.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <a
+                href="{{ url_for('aptitude_test') }}"
+                class="aptitude-back-btn"
+            >
+
+                <i class="fas fa-arrow-left"></i>
+
+                <span>
+                    Back to Tests
+                </span>
+
+            </a>
+
+        </div>
+
+    </header>
+
+    <!-- Main Content -->
+
+    <main class="aptitude-test-container">
+
+        <div class="aptitude-layout">
+
+            <!-- Sidebar -->
+
+            <aside class="aptitude-sidebar">
+
+                <!-- Test Information -->
+
+                <section class="aptitude-info-card reveal-on-scroll">
+
+                    <div class="card-heading">
+
+                        <div class="card-heading-icon">
+
+                            <i class="fas fa-info-circle"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span class="card-eyebrow">
+                                OVERVIEW
+                            </span>
+
+                            <h2>
+                                Test Information
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div class="test-info-list">
+
+                        <div class="test-info-item">
+
+                            <div class="test-info-label">
+
+                                <span class="info-icon">
+
+                                    <i class="fas fa-question-circle"></i>
+
+                                </span>
+
+                                <span>
+                                    Total Questions
+                                </span>
+
+                            </div>
+
+                            <span class="info-value info-value-primary">
+
+                                {{ questions|length }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="test-info-item">
+
+                            <div class="test-info-label">
+
+                                <span class="info-icon">
+
+                                    <i class="fas fa-clock"></i>
+
+                                </span>
+
+                                <span>
+                                    Time Limit
+                                </span>
+
+                            </div>
+
+                            <span class="info-value">
+                                No limit
+                            </span>
+
+                        </div>
+
+                        <div class="test-info-item">
+
+                            <div class="test-info-label">
+
+                                <span class="info-icon">
+
+                                    <i class="fas fa-trophy"></i>
+
+                                </span>
+
+                                <span>
+                                    Passing Score
+                                </span>
+
+                            </div>
+
+                            <span class="info-value">
+                                50%
+                            </span>
+
+                        </div>
+
+                        <div class="test-info-item">
+
+                            <div class="test-info-label">
+
+                                <span class="info-icon">
+
+                                    <i class="fas fa-redo"></i>
+
+                                </span>
+
+                                <span>
+                                    Attempts
+                                </span>
+
+                            </div>
+
+                            <span class="info-value">
+                                Unlimited
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="test-tip">
+
+                        <div class="tip-icon">
+
+                            <i class="fas fa-lightbulb"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Quick Tip
+                            </strong>
+
+                            <p>
+                                Read each question carefully before answering.
+                                There is no negative marking.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- Question Navigation -->
+
+                <section
+                    class="aptitude-info-card navigation-card reveal-on-scroll"
+                >
+
+                    <div class="card-heading">
+
+                        <div class="card-heading-icon">
+
+                            <i class="fas fa-th-list"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span class="card-eyebrow">
+                                NAVIGATION
+                            </span>
+
+                            <h2>
+                                Questions
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div class="question-navigation">
+
+                        {% for q in questions %}
+
+                            <button
+                                type="button"
+                                class="question-nav-btn {% if loop.first %}active{% endif %}"
+                                data-question="{{ loop.index0 }}"
+                                aria-label="Go to question {{ loop.index }}"
+                            >
+
+                                {{ loop.index }}
+
+                                <span class="nav-check">
+
+                                    <i class="fas fa-check"></i>
+
+                                </span>
+
+                            </button>
+
+                        {% endfor %}
+
+                    </div>
+
+                    <div class="navigation-legend">
+
+                        <span>
+
+                            <i class="far fa-circle"></i>
+
+                            Not answered
+
+                        </span>
+
+                        <span>
+
+                            <i class="fas fa-check-circle"></i>
+
+                            Answered
+
+                        </span>
+
+                    </div>
+
+                </section>
+
+                <!-- About Test -->
+
+                <section
+                    class="aptitude-info-card about-card reveal-on-scroll"
+                >
+
+                    {% if test_type == 'logical' %}
+
+                        <div class="card-heading">
+
+                            <div class="card-heading-icon">
+
+                                <i class="fas fa-puzzle-piece"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span class="card-eyebrow">
+                                    SKILL AREA
+                                </span>
+
+                                <h2>
+                                    Logical Reasoning
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                        <p>
+                            Logical reasoning tests assess your ability to analyze
+                            information, identify patterns, and reach conclusions
+                            based on given premises.
+                        </p>
+
+                        <p>
+                            These skills are essential for problem-solving and
+                            critical thinking in any career path.
+                        </p>
+
+                    {% elif test_type == 'verbal' %}
+
+                        <div class="card-heading">
+
+                            <div class="card-heading-icon">
+
+                                <i class="fas fa-comment-alt"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span class="card-eyebrow">
+                                    SKILL AREA
+                                </span>
+
+                                <h2>
+                                    Verbal Ability
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                        <p>
+                            Verbal ability tests measure your understanding of
+                            language, including grammar, vocabulary, and comprehension.
+                        </p>
+
+                        <p>
+                            These skills are crucial for effective communication
+                            in professional settings.
+                        </p>
+
+                    {% elif test_type == 'quantitative' %}
+
+                        <div class="card-heading">
+
+                            <div class="card-heading-icon">
+
+                                <i class="fas fa-calculator"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span class="card-eyebrow">
+                                    SKILL AREA
+                                </span>
+
+                                <h2>
+                                    Quantitative Aptitude
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                        <p>
+                            Quantitative aptitude tests assess your ability to work
+                            with numbers, solve mathematical problems, and analyze
+                            numerical data.
+                        </p>
+
+                        <p>
+                            These skills are valuable in fields requiring data
+                            analysis and problem-solving.
+                        </p>
+
+                    {% elif test_type == 'technical' %}
+
+                        <div class="card-heading">
+
+                            <div class="card-heading-icon">
+
+                                <i class="fas fa-microchip"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span class="card-eyebrow">
+                                    SKILL AREA
+                                </span>
+
+                                <h2>
+                                    Technical Knowledge
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                        <p>
+                            Technical knowledge tests evaluate your understanding
+                            of fundamental concepts in computer science and technology.
+                        </p>
+
+                        <p>
+                            These skills are essential for careers in software
+                            development, IT, and related fields.
+                        </p>
+
+                    {% endif %}
+
+                </section>
+
+            </aside>
+
+            <!-- Questions Area -->
+
+            <section class="aptitude-question-area">
+
+                <div class="question-panel reveal-on-scroll">
+
+                    <!-- Progress -->
+
+                    <div class="test-progress-section">
+
+                        <div class="progress-top">
+
+                            <div>
+
+                                <span class="progress-eyebrow">
+                                    YOUR PROGRESS
+                                </span>
+
+                                <h2>
+                                    Test Progress
+                                </h2>
+
+                            </div>
+
+                            <div class="progress-count">
+
+                                <strong id="answered-count">
+                                    0
+                                </strong>
+
+                                <span>
+                                    / {{ questions|length }} answered
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="progress-track">
+
+                            <div
+                                class="progress-fill"
+                                id="aptitude-progress"
+                                role="progressbar"
+                                aria-valuenow="0"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                style="width: 0%;"
+                            ></div>
+
+                        </div>
+
+                        <div class="progress-status">
+
+                            <span>
+
+                                <i class="fas fa-circle"></i>
+
+                                Keep going
+
+                            </span>
+
+                            <span id="progress-percentage">
+                                0%
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Test Form -->
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('take_aptitude_test', test_type=test_type) }}"
+                        id="aptitude-test-form"
+                    >
+
+                        {% for question in questions %}
+
+                        <article
+                            class="question-card {% if loop.first %}question-active{% endif %}"
+                            id="question-{{ loop.index }}"
+                            data-question-index="{{ loop.index0 }}"
+                        >
+
+                            <div class="question-card-top">
+
+                                <div class="question-number">
+
+                                    <span>
+                                        Question
+                                    </span>
+
+                                    <strong>
+                                        {{ loop.index }}
+                                    </strong>
+
+                                    <span>
+                                        of {{ questions|length }}
+                                    </span>
+
+                                </div>
+
+                                <div class="question-status">
+
+                                    <i class="far fa-circle"></i>
+
+                                    <span>
+                                        Not answered
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="question-text">
+                                {{ question.question }}
+                            </div>
+
+                            <div class="options-list">
+
+                                {% for option in question.options %}
+
+                                <div class="option-item">
+
+                                    <input
+                                        type="radio"
+                                        name="{{ question.id }}"
+                                        id="q{{ question.id }}_option{{ loop.index0 }}"
+                                        value="{{ loop.index0 }}"
+                                    >
+
+                                    <label
+                                        for="q{{ question.id }}_option{{ loop.index0 }}"
+                                        class="option-label"
+                                    >
+
+                                        <span class="option-letter">
+                                            {{ loop.index0 + 1 }}
+                                        </span>
+
+                                        <span class="option-text">
+                                            {{ option }}
+                                        </span>
+
+                                        <span class="option-check">
+
+                                            <i class="fas fa-check"></i>
+
+                                        </span>
+
+                                    </label>
+
+                                </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </article>
+
+                        {% endfor %}
+
+                        <!-- Controls -->
+
+                        <div class="test-controls">
+
+                            <button
+                                type="button"
+                                id="prev-question"
+                                class="test-control-btn previous-btn"
+                                disabled
+                            >
+
+                                <i class="fas fa-arrow-left"></i>
+
+                                <span>
+                                    Previous
+                                </span>
+
+                            </button>
+
+                            <div class="control-center">
+
+                                <span id="current-question-indicator">
+                                    Question 1
+                                </span>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                id="next-question"
+                                class="test-control-btn next-btn"
+                            >
+
+                                <span>
+                                    Next
+                                </span>
+
+                                <i class="fas fa-arrow-right"></i>
+
+                            </button>
+
+                            <button
+                                type="submit"
+                                id="submit-test"
+                                class="test-control-btn submit-btn"
+                            >
+
+                                <span>
+                                    Submit Test
+                                </span>
+
+                                <i class="fas fa-check-circle"></i>
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+    window.CAREER_COMPASS_APTITUDE = {
+        totalQuestions: {{ questions|length }},
+        testType: {{ test_type|tojson }}
+    };
+</script>
+
+<script
+    src="{{ url_for('static', filename='js/take-aptitude-test.js') }}"
+    defer
+></script>
+
+{% endblock %}
+
